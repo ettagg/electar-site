@@ -68,20 +68,28 @@ section[id]{scroll-margin-top:64px}
 .sec__head{max-width:50rem;display:grid;gap:14px;margin-bottom:clamp(28px,4.5vw,52px)}
 .sec__head h2,.band h2{font-size:clamp(1.9rem,1.15rem + 2.4vw,3rem);line-height:1.06;font-weight:700;letter-spacing:-.006em}
 .lead{font-size:clamp(1.0625rem,1rem + .3vw,1.2rem);line-height:1.6;color:var(--ink-2);max-width:62ch}
-.btn{display:inline-flex;align-items:center;gap:8px;font:600 .9rem/1 var(--f-body);text-decoration:none;border-radius:999px;padding:13px 20px;border:1.5px solid transparent;cursor:pointer;transition:transform .15s,background-color .15s,border-color .15s}
-.btn:hover{transform:translateY(-1px)}
+.btn{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:8px;font:600 .9rem/1 var(--f-body);text-decoration:none;border-radius:999px;padding:13px 20px;border:1.5px solid transparent;cursor:pointer;transition:transform .5s var(--ease),box-shadow .5s var(--ease),background-color .3s,border-color .3s}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translateY(0) scale(.98);transition-duration:.12s}
 .btn--gold{background:var(--gold-hi);color:var(--navy)}
-.btn--gold:hover{background:#e2b35c}
+.btn--gold:hover{background:#e2b35c;box-shadow:0 12px 30px rgba(212,165,55,.32)}
+.btn--gold::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.5) 50%,transparent 70%);transform:translateX(-120%);transition:transform .9s var(--ease);pointer-events:none}
+.btn--gold:hover::after{transform:translateX(120%)}
 .btn--ghost{color:var(--band-ink);border-color:rgba(255,255,255,.3)}
 .btn--ghost:hover{border-color:var(--gold-hi)}
 .btn--line{color:var(--ink);border-color:var(--line-2);background:transparent}
 .btn--line:hover{border-color:var(--gold)}
 /* sections drift in as they arrive; at rest (no script, thumbnails) they are simply there */
-.rv.is-in{animation:rv-in .6s cubic-bezier(.2,.7,.2,1) both}
-@keyframes rv-in{from{transform:translateY(18px);opacity:.35}to{transform:none;opacity:1}}
+/* reveals only hide anything once the script has switched them on (html.rv-on), so a failed
+   script never leaves the page blank */
+.rv-on .rv{opacity:0;transform:translateY(28px)}
+.rv-on .rv.is-in{opacity:1;transform:none;transition:opacity .9s var(--ease) calc(var(--i,0)*90ms),transform 1.15s var(--ease) calc(var(--i,0)*90ms)}
+.js img.fade{opacity:0;filter:blur(10px);transform:scale(1.02);transition:opacity .8s var(--ease),filter 1s var(--ease),transform 1.3s var(--ease)}
+.js img.fade.is-loaded{opacity:1;filter:none;transform:none}
 
 /* ---------- nav with a scroll gauge ---------- */
-.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:var(--band);border-bottom:1px solid rgba(255,255,255,.07)}
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:var(--band);border-bottom:1px solid rgba(255,255,255,.07);transition:background-color .5s var(--ease),box-shadow .5s var(--ease)}
+.nav.is-scrolled{background:rgba(21,29,48,.78);-webkit-backdrop-filter:blur(14px) saturate(1.4);backdrop-filter:blur(14px) saturate(1.4);box-shadow:0 8px 30px rgba(3,7,16,.25)}
 .nav__in{display:flex;align-items:center;justify-content:space-between;gap:24px;min-height:58px}
 .nav__brand{display:block;padding:6px 0}
 .nav__brand img{display:block;width:128px;height:auto}
@@ -92,7 +100,9 @@ section[id]{scroll-margin-top:64px}
 @media (max-width:900px){.nav__links{display:none}}
 
 /* ---------- hero: a booth you can switch ---------- */
-.hero{background:radial-gradient(900px 520px at 78% 40%,rgba(127,227,255,.08),transparent 62%),var(--band);color:var(--band-ink);padding-block:clamp(36px,5vw,64px) clamp(48px,6vw,80px);overflow:hidden}
+.hero{position:relative;isolation:isolate;background:radial-gradient(900px 520px at 78% 40%,rgba(127,227,255,.08),transparent 62%),var(--band);color:var(--band-ink);padding-block:clamp(36px,5vw,64px) clamp(48px,6vw,80px);overflow:hidden}
+/* a soft light that drifts after the pointer */
+.hero::before{content:"";position:absolute;z-index:-1;left:0;top:0;width:680px;height:680px;border-radius:50%;background:radial-gradient(closest-side,rgba(212,165,55,.10),rgba(127,227,255,.05) 55%,transparent);transform:translate(var(--hx,70vw),var(--hy,30vh)) translate(-50%,-50%);transition:transform 1.4s var(--ease);pointer-events:none}
 .hero__grid{display:grid;gap:36px;grid-template-columns:minmax(0,1fr);align-items:center}
 @media (min-width:1000px){.hero__grid{grid-template-columns:minmax(0,1fr) minmax(360px,470px);gap:56px}}
 .hero h1{font-size:clamp(2.5rem,1.2rem + 4.4vw,4.5rem);line-height:1;font-weight:700;letter-spacing:-.012em;margin-top:16px;max-width:14ch}
@@ -436,6 +446,30 @@ section[id]{scroll-margin-top:64px}
 .spec{margin-top:56px}
 .phones-facts{max-width:34rem}
 
+/* ---------- premium motion ---------- */
+:root{--ease:cubic-bezier(.16,1,.3,1)}
+.js:not(.is-ready){overflow:hidden}
+.loader{position:fixed;inset:0;z-index:100;display:none;place-items:center;background:var(--band);color:var(--band-ink)}
+.js .loader{display:grid}
+.is-ready .loader{opacity:0;visibility:hidden;transition:opacity .8s var(--ease) .1s,visibility 0s .9s}
+.loader__in{display:grid;justify-items:center;gap:20px;transition:transform 1s var(--ease)}
+.is-ready .loader__in{transform:translateY(-10px) scale(.97)}
+.loader__word{position:relative;width:min(220px,56vw);aspect-ratio:560/89}
+.loader__word img{position:absolute;inset:0;width:100%;height:100%}
+.loader__word .base{opacity:.16;filter:grayscale(1)}
+.loader__word .fill{clip-path:inset(0 calc(100% - var(--p,0%)) 0 0);transition:clip-path .55s var(--ease)}
+.loader__bar{width:min(220px,56vw);height:2px;border-radius:2px;background:rgba(255,255,255,.1);overflow:hidden}
+.loader__bar i{display:block;height:100%;width:var(--p,0%);background:linear-gradient(90deg,var(--gold-hi),var(--current));transition:width .55s var(--ease)}
+.loader__pct{font:500 .68rem/1 var(--f-mono);letter-spacing:.14em;color:var(--band-ink-2);font-variant-numeric:tabular-nums}
+/* hero entrance, once the loader lifts */
+.js .hero [data-in]{opacity:0;transform:translateY(24px)}
+.js .hero .view[data-in]{transform:translateY(30px) scale(.96)}
+.is-ready .hero [data-in],.is-ready .hero .view[data-in]{opacity:1;transform:none;transition:opacity 1s var(--ease) calc(var(--d,0)*1ms),transform 1.2s var(--ease) calc(var(--d,0)*1ms)}
+.js .hero h1 .w{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.1em;margin-bottom:-.1em}
+.js .hero h1 .w>span{display:inline-block;transform:translateY(110%)}
+.is-ready .hero h1 .w>span{transform:none;transition:transform 1.15s var(--ease) calc(var(--d,0)*1ms)}
+.tab,.chip,.answer,.wbtn,.seg button,.lang button,.opt,.hs{transition-timing-function:var(--ease)}
+
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
@@ -447,8 +481,16 @@ section[id]{scroll-margin-top:64px}
 }
 </style>
 
+<script>document.documentElement.classList.add('js');setTimeout(function(){document.documentElement.classList.add('is-ready')},6000)</script>
 </head>
 <body>
+<div class="loader" id="loader" role="status" aria-live="polite">
+  <div class="loader__in">
+    <div class="loader__word" aria-hidden="true"><img class="base" src="img/wordmark-white.webp" width="560" height="89" alt=""><img class="fill" src="img/wordmark-white.webp" width="560" height="89" alt=""></div>
+    <div class="loader__bar" aria-hidden="true"><i></i></div>
+    <p class="loader__pct" id="loader-pct">Loading ElectAR</p>
+  </div>
+</div>
 <header class="nav">
   <div class="wrap nav__in">
     <a class="nav__brand" href="#top"><img src="img/wordmark-white.webp" width="560" height="89" alt="ElectAR"></a>
@@ -463,14 +505,14 @@ section[id]{scroll-margin-top:64px}
 <section class="hero" id="top" aria-labelledby="hero-h">
   <div class="wrap hero__grid">
     <div>
-      <p class="eyebrow eyebrow--band">Senior High TVL · Electrical Installation and Maintenance</p>
+      <p class="eyebrow eyebrow--band" data-in style="--d:0">Senior High TVL · Electrical Installation and Maintenance</p>
       <h1 id="hero-h">Learn the wiring by <span class="ar">doing</span> the wiring.</h1>
-      <p class="hero__lead">ElectAR puts real job sites on the classroom floor and lets students make every call an electrician makes. This booth works: flip the breaker or either stair switch and watch the lamp.</p>
-      <div class="hero__cta">
+      <p class="hero__lead" data-in style="--d:620">ElectAR puts real job sites on the classroom floor and lets students make every call an electrician makes. This booth works: flip the breaker or either stair switch and watch the lamp.</p>
+      <div class="hero__cta" data-in style="--d:760">
         <a class="btn btn--gold" href="#play">Play a full sample</a>
         <a class="btn btn--ghost" href="#scenes">Explore the scenes</a>
       </div>
-      <ul class="hero__facts">
+      <ul class="hero__facts" data-in style="--d:880">
         <li><strong data-count="18">18</strong><span>AR scenes</span></li>
         <li><strong data-count="211">211</strong><span>Graded decisions</span></li>
         <li><strong data-count="4">4</strong><span>Quarterly problems</span></li>
@@ -478,7 +520,7 @@ section[id]{scroll-margin-top:64px}
       </ul>
     </div>
     <div class="bench">
-      <div class="view is-live is-lit" id="live" role="group" aria-label="3-way switching booth you can operate">
+      <div class="view is-live is-lit" id="live" data-in style="--d:260" role="group" aria-label="3-way switching booth you can operate">
         <div class="view__plane" aria-hidden="true"></div>
         <img class="view__booth" src="img/booth-3way.webp" width="1265" height="1473" alt="3D render of the 3-way switching booth: orange conduit on a plywood wall, a lamp, switches S3-A and S3-B, a panel with a 2-pole breaker, and a bench of tools.">
         <svg class="view__svg" viewBox="0 0 1265 1473" aria-hidden="true">
@@ -494,7 +536,7 @@ section[id]{scroll-margin-top:64px}
         <button type="button" class="hs hs--d" id="hs-a" style="left:24.25%;top:45.2%" data-pos="UP"><span class="rocker" aria-hidden="true"></span>S3-A <span class="hs__state" id="hs-a-s">UP</span></button>
         <button type="button" class="hs hs--r" id="hs-b" style="left:57.76%;top:40.3%" data-pos="UP"><span class="rocker" aria-hidden="true"></span>S3-B <span class="hs__state" id="hs-b-s">UP</span></button>
       </div>
-      <div class="card3">
+      <div class="card3" data-in style="--d:520">
         <div class="card3__top"><p class="card3__title">Test card · lamp from 2 places</p><p class="card3__count" id="card3-count">1 of 4 tried</p></div>
         <table>
           <thead><tr><th scope="col">S3-A</th><th scope="col">S3-B</th><th scope="col">Lamp</th><th scope="col"><span class="visually-hidden">Tried</span></th></tr></thead>
@@ -823,7 +865,9 @@ section[id]{scroll-margin-top:64px}
   /* ---------------- scroll: reveal, nav gauge, counters ---------------- */
   const gauge = $('gauge');
   const navLinks = [...document.querySelectorAll('.nav__links a')];
+  const nav = document.querySelector('.nav');
   function onScroll() {
+    nav.classList.toggle('is-scrolled', scrollY > 8);
     const max = document.documentElement.scrollHeight - innerHeight;
     gauge.style.setProperty('--p', max > 0 ? Math.min(1, scrollY / max) : 0);
     let here = null;
@@ -844,14 +888,30 @@ section[id]{scroll-margin-top:64px}
     };
     requestAnimationFrame(step);
   }
-  if ('IntersectionObserver' in window) {
+  // Reveals start after the loader lifts. Groups come in one after another; once an element has
+  // arrived its reveal classes are dropped, so its own hover transforms work again.
+  function startReveal() {
+    const groups = ['.steps > li', '.quarters > .panel', '.fixes > .fix', '.samples > .sample', '#feat-student > li', '.nums > li', '.wire-btns', '.devices > li'];
+    groups.forEach((sel) => document.querySelectorAll(sel).forEach((n, k) => { n.classList.add('rv'); n.style.setProperty('--i', k % 4); }));
+    ['.scorecard', '.sheet', '.wall', '.phone', '.phones-facts', '.tabs', '.seg'].forEach((sel) => document.querySelectorAll(sel).forEach((n) => n.classList.add('rv')));
+    const settle = (n) => n.addEventListener('transitionend', function done(e) {
+      if (e.target !== n || e.propertyName !== 'transform') return;
+      n.removeEventListener('transitionend', done);
+      n.classList.remove('rv', 'is-in'); n.style.removeProperty('--i');
+    });
+    if (!('IntersectionObserver' in window) || reduced) {
+      document.querySelectorAll('[data-count]').forEach(countUp);
+      return;
+    }
+    document.documentElement.classList.add('rv-on');
     const io = new IntersectionObserver((entries) => {
       for (const en of entries) {
         if (!en.isIntersecting) continue;
-        if (en.target.dataset.count) countUp(en.target); else en.target.classList.add('is-in');
+        if (en.target.dataset.count) countUp(en.target);
+        else { settle(en.target); en.target.classList.add('is-in'); }
         io.unobserve(en.target);
       }
-    }, { threshold: .15 });
+    }, { threshold: .12, rootMargin: '0px 0px -6% 0px' });
     document.querySelectorAll('.rv,[data-count]').forEach((n) => io.observe(n));
   }
 
@@ -1197,7 +1257,7 @@ section[id]{scroll-margin-top:64px}
       scoreEl.textContent = n === F.length ? `${ok} of 4 right first time. ${ok === 4 ? 'You’d have caught every wrong fix.' : 'Each of these is a full AR paper in the app.'}` : `${n} of 4 answered`;
     }
     F.forEach((f, k) => {
-      const card = h('article', 'fix rv');
+      const card = h('article', 'fix');
       const inner = h('div', 'fix__inner');
       const fig = () => { const fg = h('figure', 'face__fig'); const im = h('img'); im.src = `img/${f.img}.webp`; im.width = f.w; im.height = f.h; im.alt = ''; im.loading = 'lazy'; fg.append(im); return fg; };
       const front = h('div', 'face face--front'), fb = h('div', 'face__body');
@@ -1230,10 +1290,6 @@ section[id]{scroll-margin-top:64px}
       inner.append(front, back); card.append(inner); list.append(card);
     });
     score();
-    if ('IntersectionObserver' in window) {
-      const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } }), { threshold: .15 });
-      list.querySelectorAll('.rv').forEach((n) => io.observe(n));
-    }
   })();
 
   /* ---------------- marker distance ---------------- */
@@ -1364,6 +1420,63 @@ section[id]{scroll-margin-top:64px}
     const pick = (teacher) => { sl.hidden = teacher; tl.hidden = !teacher; sb.setAttribute('aria-pressed', String(!teacher)); tb.setAttribute('aria-pressed', String(teacher)); };
     sb.addEventListener('click', () => pick(false));
     tb.addEventListener('click', () => pick(true));
+  })();
+  /* ---------------- loader, hero entrance, blur-up images, hero light ---------------- */
+  (() => {
+    const root = document.documentElement, loader = $('loader'), label = $('loader-pct');
+    // the hero headline rises word by word
+    const h1 = document.querySelector('.hero h1');
+    let d = 120;
+    const wrap = (content) => {
+      const outer = h('span', 'w'), inner = h('span');
+      inner.style.setProperty('--d', d); d += 70;
+      outer.append(inner);
+      return [outer, inner];
+    };
+    [...h1.childNodes].forEach((node) => {
+      if (node.nodeType !== 3) { const [outer, inner] = wrap(); node.before(outer); inner.append(node); return; }
+      const frag = document.createDocumentFragment();
+      for (const w of node.textContent.split(/(\s+)/)) {
+        if (!w) continue;
+        if (/^\s+$/.test(w)) { frag.append(w); continue; }
+        const [outer, inner] = wrap(); inner.append(w); frag.append(outer);
+      }
+      node.replaceWith(frag);
+    });
+    // content images fade up from a blur as they arrive
+    document.querySelectorAll('.les img, .face__fig img, .sample img').forEach((im) => {
+      im.classList.add('fade');
+      const done = () => im.classList.add('is-loaded');
+      if (im.complete && im.naturalWidth) requestAnimationFrame(done); else { im.addEventListener('load', done, { once: true }); im.addEventListener('error', done, { once: true }); }
+    });
+    // the loader charges the wordmark as the hero's images and the fonts really load
+    const waits = [...document.querySelectorAll('.hero img')].map((im) => im.complete ? Promise.resolve() : new Promise((r) => { im.addEventListener('load', r, { once: true }); im.addEventListener('error', r, { once: true }); }));
+    waits.push(document.fonts ? document.fonts.ready : Promise.resolve());
+    let got = 0;
+    const show = (p) => { loader.style.setProperty('--p', p + '%'); label.textContent = Math.round(p) + '%'; };
+    waits.forEach((w) => w.then(() => show((++got / waits.length) * 100)));
+    show(8);
+    const minShow = new Promise((r) => setTimeout(r, reduced ? 0 : 900));
+    let finished = false;
+    const finish = () => {
+      if (finished) return; finished = true;
+      show(100);
+      setTimeout(() => { root.classList.add('is-ready'); label.textContent = 'Ready'; startReveal(); }, reduced ? 0 : 380);
+    };
+    Promise.all([Promise.all(waits), minShow]).then(finish);
+    setTimeout(finish, 4500);
+    // a soft light follows the pointer across the hero
+    const hero = document.querySelector('.hero');
+    let raf = 0;
+    hero.addEventListener('pointermove', (e) => {
+      if (reduced || raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        const r = hero.getBoundingClientRect();
+        hero.style.setProperty('--hx', (e.clientX - r.left) + 'px');
+        hero.style.setProperty('--hy', (e.clientY - r.top) + 'px');
+      });
+    });
   })();
 })();
 </script>
