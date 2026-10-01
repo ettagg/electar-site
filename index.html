@@ -1,0 +1,1371 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="ElectAR: augmented-reality practice for Senior High TVL Electrical Installation and Maintenance, built to Philippine practice.">
+<link rel="icon" type="image/png" href="img/favicon.png">
+<title>ElectAR Showcase</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: a hands-on workshop. Every section is a working bench in the brand navy, and the one
+   moving colour is current: cyan beads running through conduit whenever something is live. */
+:root{
+  --navy:#1d283e; --navy-hi:#27324c; --navy-mid:#354566;
+  --gold:#a87516; --gold-hi:#d4a537; --current:#7fe3ff;
+  --page:#f0f2f5; --page-alt:#ffffff; --surface:#ffffff; --surface-2:#f6f7f9;
+  --line:#dde2ea; --line-2:#c6cdd8;
+  --ink:#1d283e; --ink-2:#434c60; --ink-3:#5e6676;
+  --accent-text:#8a5f10; --accent-tint:#fbf1dc;
+  --live:#c8373c; --ok:#17864a; --ok-tint:#e2f4e9; --live-tint:#fbe6e6; --fill:#1d283e;
+  --sw-ring:rgba(0,0,0,.18);
+  --shadow:0 1px 2px rgba(29,40,62,.05),0 12px 32px rgba(29,40,62,.08);
+  --band:#1d283e; --band-2:#141c2e; --band-ink:#e7ebf3; --band-ink-2:#aeb7c8; --band-gold:#d4a537;
+  --f-display:"Chakra Petch","Bahnschrift","Arial Narrow",sans-serif;
+  --f-body:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --page:#0e1320; --page-alt:#121a2a; --surface:#182031; --surface-2:#1f2839;
+  --line:#2a3447; --line-2:#3a455c;
+  --ink:#e7ebf3; --ink-2:#c3c9d5; --ink-3:#a7afbf;
+  --accent-text:#e2b35c; --accent-tint:#2e2715;
+  --live:#f07a7a; --ok:#4ade80; --ok-tint:#16301f; --live-tint:#3a1d20; --fill:#2a3858;
+  --sw-ring:rgba(255,255,255,.32);
+  --shadow:0 1px 2px rgba(0,0,0,.35),0 12px 32px rgba(0,0,0,.3);
+  --band:#151d30; --band-2:#0b111d;
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --page:#0e1320; --page-alt:#121a2a; --surface:#182031; --surface-2:#1f2839;
+  --line:#2a3447; --line-2:#3a455c;
+  --ink:#e7ebf3; --ink-2:#c3c9d5; --ink-3:#a7afbf;
+  --accent-text:#e2b35c; --accent-tint:#2e2715;
+  --live:#f07a7a; --ok:#4ade80; --ok-tint:#16301f; --live-tint:#3a1d20; --fill:#2a3858;
+  --sw-ring:rgba(255,255,255,.32);
+  --shadow:0 1px 2px rgba(0,0,0,.35),0 12px 32px rgba(0,0,0,.3);
+  --band:#151d30; --band-2:#0b111d;
+  color-scheme:dark;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--page);color:var(--ink);font:400 1rem/1.6 var(--f-body);-webkit-font-smoothing:antialiased}
+img{max-width:100%;height:auto}
+h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance}
+p{margin:0}
+button{font:inherit}
+:focus-visible{outline:2px solid var(--gold-hi);outline-offset:2px}
+.wrap{max-width:1200px;margin-inline:auto;padding-inline:clamp(16px,4vw,40px)}
+section[id]{scroll-margin-top:64px}
+.eyebrow{font:600 .75rem/1.35 var(--f-mono);letter-spacing:.09em;text-transform:uppercase;color:var(--accent-text)}
+.eyebrow--band{color:var(--band-gold)}
+.sec{padding-block:clamp(64px,9vw,116px)}
+.sec--alt{background:var(--page-alt)}
+.sec__head{max-width:50rem;display:grid;gap:14px;margin-bottom:clamp(28px,4.5vw,52px)}
+.sec__head h2,.band h2{font-size:clamp(1.9rem,1.15rem + 2.4vw,3rem);line-height:1.06;font-weight:700;letter-spacing:-.006em}
+.lead{font-size:clamp(1.0625rem,1rem + .3vw,1.2rem);line-height:1.6;color:var(--ink-2);max-width:62ch}
+.btn{display:inline-flex;align-items:center;gap:8px;font:600 .9rem/1 var(--f-body);text-decoration:none;border-radius:999px;padding:13px 20px;border:1.5px solid transparent;cursor:pointer;transition:transform .15s,background-color .15s,border-color .15s}
+.btn:hover{transform:translateY(-1px)}
+.btn--gold{background:var(--gold-hi);color:var(--navy)}
+.btn--gold:hover{background:#e2b35c}
+.btn--ghost{color:var(--band-ink);border-color:rgba(255,255,255,.3)}
+.btn--ghost:hover{border-color:var(--gold-hi)}
+.btn--line{color:var(--ink);border-color:var(--line-2);background:transparent}
+.btn--line:hover{border-color:var(--gold)}
+/* sections drift in as they arrive; at rest (no script, thumbnails) they are simply there */
+.rv.is-in{animation:rv-in .6s cubic-bezier(.2,.7,.2,1) both}
+@keyframes rv-in{from{transform:translateY(18px);opacity:.35}to{transform:none;opacity:1}}
+
+/* ---------- nav with a scroll gauge ---------- */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:var(--band);border-bottom:1px solid rgba(255,255,255,.07)}
+.nav__in{display:flex;align-items:center;justify-content:space-between;gap:24px;min-height:58px}
+.nav__brand{display:block;padding:6px 0}
+.nav__brand img{display:block;width:128px;height:auto}
+.nav__links{display:flex;gap:2px}
+.nav__links a{color:rgba(231,235,243,.8);text-decoration:none;font:500 .875rem/1 var(--f-body);padding:10px 12px;border-radius:8px}
+.nav__links a:hover,.nav__links a.is-here{color:#fff;background:rgba(255,255,255,.08)}
+.nav__gauge{position:absolute;left:0;bottom:-1px;height:2px;width:100%;transform-origin:0 50%;transform:scaleX(var(--p,0));background:linear-gradient(90deg,var(--gold-hi),var(--current))}
+@media (max-width:900px){.nav__links{display:none}}
+
+/* ---------- hero: a booth you can switch ---------- */
+.hero{background:radial-gradient(900px 520px at 78% 40%,rgba(127,227,255,.08),transparent 62%),var(--band);color:var(--band-ink);padding-block:clamp(36px,5vw,64px) clamp(48px,6vw,80px);overflow:hidden}
+.hero__grid{display:grid;gap:36px;grid-template-columns:minmax(0,1fr);align-items:center}
+@media (min-width:1000px){.hero__grid{grid-template-columns:minmax(0,1fr) minmax(360px,470px);gap:56px}}
+.hero h1{font-size:clamp(2.5rem,1.2rem + 4.4vw,4.5rem);line-height:1;font-weight:700;letter-spacing:-.012em;margin-top:16px;max-width:14ch}
+.hero h1 .ar{color:var(--band-gold)}
+.hero__lead{margin-top:20px;font-size:clamp(1.0625rem,1rem + .35vw,1.25rem);color:var(--band-ink-2);max-width:52ch}
+.hero__cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.hero__facts{list-style:none;margin:36px 0 0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 28px;max-width:520px}
+@media (min-width:560px){.hero__facts{grid-template-columns:repeat(4,auto)}}
+.hero__facts li{display:grid;gap:4px}
+.hero__facts strong{font:600 1.85rem/1 var(--f-display);color:#fff;font-variant-numeric:tabular-nums;white-space:nowrap}
+.hero__facts span{font:500 .68rem/1.3 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--band-ink-2)}
+
+.bench{display:grid;gap:12px}
+.view{position:relative;overflow:hidden;border-radius:18px;aspect-ratio:1265/1473;max-width:470px;width:100%;margin-inline:auto;
+  background:radial-gradient(70% 55% at 50% 30%,rgba(255,255,255,.6),transparent 70%),linear-gradient(180deg,#ece9e3 0%,#e2ded6 70%,#cfc9be 70.3%,#c4bdb1 100%);
+  box-shadow:0 30px 70px rgba(3,7,16,.5),0 0 0 1px rgba(255,255,255,.08),inset 0 0 80px rgba(40,30,15,.16);transition:filter .5s}
+.view::after{content:"";position:absolute;inset:0;pointer-events:none;background:rgba(10,14,26,.32);opacity:0;transition:opacity .5s}
+.view.is-dark::after{opacity:1}
+.view__plane{position:absolute;left:-30%;right:-30%;bottom:0;height:30%;background-image:radial-gradient(circle,rgba(255,255,255,.95) 0 1.4px,transparent 2px);background-size:24px 24px;transform:perspective(360px) rotateX(58deg);transform-origin:50% 100%;opacity:.8;-webkit-mask-image:linear-gradient(to top,#000,transparent 92%);mask-image:linear-gradient(to top,#000,transparent 92%)}
+.view__booth{position:absolute;inset:0;width:100%;height:100%;display:block}
+.view__svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.wire-halo{fill:none;stroke:rgba(118,214,255,.45);stroke-width:26;stroke-linecap:round;stroke-linejoin:round}
+.wire-bead{fill:none;stroke:#effcff;stroke-width:12;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:.1 42;animation:bead .75s linear infinite}
+@keyframes bead{to{stroke-dashoffset:-42.1}}
+.wire{opacity:0;transition:opacity .35s}
+.view.is-live .wire--feed,.view.is-lit .wire--lamp{opacity:1}
+.glow{opacity:0;transition:opacity .35s}
+.view.is-lit .glow{opacity:1;animation:glow 2.4s ease-in-out infinite alternate}
+@keyframes glow{from{opacity:.75}to{opacity:1}}
+.hs{position:absolute;z-index:2;display:inline-flex;align-items:center;gap:8px;font:600 .78rem/1 var(--f-body);color:#fff;background:var(--navy);border:1.5px solid rgba(255,255,255,.9);border-radius:999px;padding:7px 12px 7px 8px;cursor:pointer;box-shadow:0 6px 16px rgba(8,14,28,.32);transition:background-color .15s,border-color .15s,transform .15s;white-space:nowrap}
+.hs:hover{background:var(--navy-hi);border-color:var(--gold-hi)}
+.hs:active{transform:scale(.97)}
+.hs--l{transform:translate(calc(-100% - 16px),-50%)}
+.hs--r{transform:translate(16px,-50%)}
+.hs--d{transform:translate(-50%,18px)}
+.hs--d:active{transform:translate(-50%,18px) scale(.97)}
+.hs--l:active{transform:translate(calc(-100% - 16px),-50%) scale(.97)}
+.hs--r:active{transform:translate(16px,-50%) scale(.97)}
+.hs__state{font:700 .66rem/1 var(--f-mono);letter-spacing:.06em;padding:4px 6px;border-radius:5px;background:#3a455c;color:#fff}
+.hs[data-on="true"] .hs__state{background:var(--gold-hi);color:var(--navy)}
+.rocker{position:relative;width:14px;height:22px;border-radius:4px;background:#f2efe9;box-shadow:inset 0 0 0 1.5px #9aa3b3}
+.rocker::after{content:"";position:absolute;left:3px;right:3px;height:8px;border-radius:2px;background:#1d283e;top:3px;transition:top .18s}
+.hs[data-pos="DOWN"] .rocker::after{top:11px}
+.pin{position:absolute;z-index:1;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;background:#fff;box-shadow:0 0 0 2px var(--navy);pointer-events:none}
+.pin::after{content:"";position:absolute;inset:-6px;border-radius:50%;border:2px solid var(--gold-hi);animation:pin 1.8s ease-out infinite}
+@keyframes pin{from{transform:scale(.6);opacity:1}to{transform:scale(1.7);opacity:0}}
+.card3{max-width:470px;width:100%;margin-inline:auto;background:#151d2f;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px 16px;display:grid;gap:10px}
+.card3__top{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.card3__title{font:600 .7rem/1.3 var(--f-mono);letter-spacing:.09em;text-transform:uppercase;color:var(--gold-hi)}
+.card3__count{font:600 .72rem/1 var(--f-mono);color:var(--band-ink-2);font-variant-numeric:tabular-nums}
+.card3 table{width:100%;border-collapse:collapse;font:500 .8rem/1 var(--f-mono);font-variant-numeric:tabular-nums}
+.card3 th{font-weight:600;font-size:.66rem;letter-spacing:.08em;color:var(--band-ink-2);text-align:left;padding:4px 6px}
+.card3 td{padding:7px 6px;border-top:1px solid rgba(255,255,255,.07);color:rgba(231,235,243,.75)}
+.card3 tr.is-now td{background:rgba(212,165,55,.16);color:#fff}
+.card3 td.tick{width:1.6rem;text-align:center;color:var(--gold-hi)}
+.lamp-on{color:#ffe08a}
+.card3__msg{font-size:.86rem;line-height:1.5;color:var(--band-ink)}
+
+/* ---------- the playable sample (from the first page) ---------- */
+.stage{border-radius:20px;background:#0d1524;box-shadow:0 30px 70px rgba(3,7,16,.35),0 0 0 1px rgba(255,255,255,.07);display:flex;flex-direction:column;gap:10px;padding:10px;color:#fff;position:relative}
+.stage__field{order:3;position:relative;overflow:hidden;border-radius:12px;aspect-ratio:1265/1473;background:radial-gradient(70% 55% at 50% 30%,rgba(255,255,255,.6),transparent 70%),linear-gradient(180deg,#ece9e3 0%,#e2ded6 70%,#cfc9be 70.3%,#c4bdb1 100%);box-shadow:inset 0 0 80px rgba(40,30,15,.16)}
+.stage__plane{position:absolute;left:-30%;right:-30%;bottom:0;height:30%;background-image:radial-gradient(circle,rgba(255,255,255,.95) 0 1.4px,transparent 2px);background-size:24px 24px;transform:perspective(360px) rotateX(58deg);transform-origin:50% 100%;opacity:.8;-webkit-mask-image:linear-gradient(to top,#000,transparent 92%);mask-image:linear-gradient(to top,#000,transparent 92%)}
+.stage__booth{position:absolute;left:0;top:0;width:100%;height:auto;display:block;filter:drop-shadow(0 16px 16px rgba(40,30,15,.16))}
+.stage__svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+.hud{order:1;display:grid;gap:8px;padding:14px 16px;border-radius:12px;background:#172036}
+.hud__title{font:600 .78rem/1.35 var(--f-body);color:rgba(255,255,255,.7)}
+.hud__count{display:flex;align-items:center;gap:12px;font:600 .72rem/1 var(--f-mono);letter-spacing:.07em;text-transform:uppercase;color:var(--gold-hi)}
+.hud__instr{font:600 .97rem/1.45 var(--f-body);color:#fff}
+.cells{position:relative;display:inline-flex;gap:2px;padding:2px;border:1.5px solid rgba(255,255,255,.55);border-radius:4px;margin-right:4px}
+.cells::after{content:"";position:absolute;right:-5px;top:50%;width:3px;height:7px;margin-top:-3.5px;background:rgba(255,255,255,.55);border-radius:0 2px 2px 0}
+.cell{width:9px;height:9px;border-radius:1.5px;background:rgba(255,255,255,.12)}
+.cell.is-now{background:rgba(255,255,255,.6)}
+.cell.is-clean{background:var(--gold-hi)}
+.cell.is-mixed{background:rgba(212,165,55,.42)}
+.hud-side{order:2;display:flex;align-items:center;justify-content:space-between;gap:12px;padding-inline:2px}
+.lang{display:inline-flex;padding:3px;border-radius:999px;background:#172036}
+.lang button{font:600 .72rem/1 var(--f-mono);letter-spacing:.06em;color:rgba(255,255,255,.72);background:none;border:0;border-radius:999px;padding:8px 12px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:#fff;color:var(--navy)}
+.score{font:600 .8rem/1 var(--f-mono);font-variant-numeric:tabular-nums;color:#fff;background:#172036;padding:10px 13px;border-radius:999px}
+.opts{order:4;display:grid;gap:8px}
+.opt{display:flex;align-items:center;gap:10px;text-align:left;font:600 .875rem/1.3 var(--f-body);color:#fff;background:var(--navy);border:1.5px solid rgba(255,255,255,.88);border-radius:18px;padding:9px 16px;cursor:pointer;box-shadow:0 4px 14px rgba(8,14,28,.28);transition:opacity .24s ease,background-color .15s,border-color .15s}
+.opt:hover{background:var(--navy-hi);border-color:var(--gold-hi)}
+.opt__key{display:inline-grid;place-items:center;flex:none;width:24px;height:24px;border-radius:50%;border:1.5px solid var(--gold-hi);color:var(--gold-hi);font:600 .72rem/1 var(--f-mono)}
+.opt.is-tried{background:#4c5569;border-color:rgba(255,255,255,.5)}
+.opt.is-tried .opt__label{text-decoration:line-through;text-decoration-thickness:1.5px;text-decoration-color:rgba(255,255,255,.75)}
+.opts.is-entering .opt{opacity:0}
+.opts.is-out .opt{opacity:0;pointer-events:none;transition:opacity .18s ease}
+.fb{order:5;display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-radius:12px;background:#172036;min-height:50px}
+.fb__chip{flex:none;font:700 .8rem/1 var(--f-mono);font-variant-numeric:tabular-nums;padding:6px 9px;border-radius:8px;background:#e5484d;color:#fff}
+.fb.is-right .fb__chip{background:#1f9d55}
+.fb.is-repeat .fb__chip{background:#4c5569}
+.fb__body{display:grid;gap:4px;min-width:0}
+.fb__text{font:500 .92rem/1.5 var(--f-body);color:rgba(255,255,255,.93)}
+.fb.is-brief .fb__text{color:rgba(255,255,255,.78)}
+.fb__label{font:600 .68rem/1.3 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--gold-hi)}
+.fb__final{display:grid;gap:6px;width:100%}
+.fb__big{font:700 1.35rem/1.15 var(--f-display);color:#fff}
+.fb__review{list-style:none;margin:0;padding:0;display:grid;gap:2px;font:500 .875rem/1.45 var(--f-body);color:rgba(255,255,255,.85)}
+.fb__again{justify-self:start;margin-top:6px;font:600 .875rem/1 var(--f-body);color:var(--navy);background:var(--gold-hi);border:0;border-radius:999px;padding:10px 18px;cursor:pointer}
+.stage.is-wide{display:block;padding:0;overflow:hidden}
+.stage.is-wide .stage__field{aspect-ratio:100/62;border-radius:20px;background:radial-gradient(70% 55% at 50% 30%,rgba(255,255,255,.6),transparent 70%),linear-gradient(180deg,#ece9e3 0%,#e2ded6 60%,#cfc9be 60.3%,#c4bdb1 100%)}
+.stage.is-wide .stage__plane{height:42%}
+.stage.is-wide .stage__booth{left:50%;top:1%;height:83%;width:auto;transform:translateX(-50%)}
+.stage.is-wide .hud{position:absolute;top:16px;left:16px;width:var(--hud-w,300px);background:rgba(15,21,35,.86);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.stage.is-wide .hud-side{position:absolute;top:16px;right:16px;flex-direction:column;align-items:flex-end;gap:8px;padding:0}
+.stage.is-wide .lang,.stage.is-wide .score{background:rgba(15,21,35,.86)}
+.stage.is-wide .opts{position:absolute;inset:0;display:block;pointer-events:none}
+.stage.is-wide .opt{position:absolute;pointer-events:auto;width:max-content;font-size:.8125rem;padding:8px 14px}
+.stage.is-wide .opt__key{display:none}
+.stage.is-wide .fb{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);width:min(760px,calc(100% - 32px));background:rgba(15,21,35,.88);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.stage__svg .lead-halo{fill:none;stroke:#fff;stroke-width:4.5;stroke-linecap:round;opacity:.95}
+.stage__svg .lead-line{fill:none;stroke:#1d283e;stroke-width:1.75;stroke-linecap:round}
+.stage__svg .dot{fill:#fff;stroke:#1d283e;stroke-width:2}
+.stage__svg .badge circle{fill:#1d283e;stroke:#fff;stroke-width:2}
+.stage__svg .badge text{fill:#fff;font:700 11px "JetBrains Mono",monospace;text-anchor:middle;dominant-baseline:central}
+#g-marks{transition:opacity .24s ease}
+#g-marks.is-out{opacity:0;transition:none}
+.fx-ring{fill:none;stroke-width:3;transform-box:fill-box;transform-origin:center;animation:fx-ring .9s cubic-bezier(.2,.7,.3,1) both}
+.fx-ring--ok{stroke:#d4a537}
+.fx-ring--live{stroke:#e5484d}
+@keyframes fx-ring{from{transform:scale(.5);opacity:1}to{transform:scale(2.8);opacity:0}}
+.fx-spark line{stroke:#fff2d4;stroke-width:3;stroke-linecap:round}
+.fx-spark circle{fill:#fffaf0}
+.fx-spark__in{animation:fx-spark .5s ease-out 2 both}
+@keyframes fx-spark{from{transform:scale(.3);opacity:1}to{transform:scale(1.3);opacity:0}}
+.fx-flow-halo{fill:none;stroke:rgba(118,214,255,.4);stroke-width:10;stroke-linecap:round;stroke-linejoin:round}
+.fx-flow{fill:none;stroke:#effcff;stroke-width:4.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:.1 14;animation:fx-flow .7s linear infinite}
+@keyframes fx-flow{to{stroke-dashoffset:-14.1}}
+.fx-lamp{animation:glow 2.4s ease-in-out infinite alternate}
+
+/* ---------- scene explorer ---------- */
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.tab{font:600 .85rem/1 var(--f-body);color:var(--ink-2);background:var(--surface);border:1.5px solid var(--line);border-radius:999px;padding:10px 16px;cursor:pointer;transition:border-color .15s,background-color .15s,color .15s}
+.tab:hover{border-color:var(--gold)}
+.tab[aria-pressed="true"]{background:var(--fill);border-color:var(--fill);color:#fff}
+.explorer{display:grid;gap:24px;grid-template-columns:minmax(0,1fr);align-items:stretch}
+@media (min-width:960px){.explorer{grid-template-columns:minmax(0,1.5fr) minmax(0,1fr)}}
+.viewer{position:relative;border-radius:18px;overflow:hidden;min-height:clamp(280px,40vw,460px);background:radial-gradient(80% 70% at 50% 64%,var(--surface-2),var(--surface) 72%);border:1px solid var(--line);box-shadow:var(--shadow);perspective:1100px;display:grid;place-items:center;padding:clamp(18px,3vw,36px)}
+.viewer::before{content:"";position:absolute;left:12%;right:12%;bottom:9%;height:14%;border-radius:50%;background:radial-gradient(closest-side,rgba(20,28,46,.22),transparent);pointer-events:none}
+.viewer__img{position:relative;max-width:100%;max-height:clamp(240px,34vw,400px);width:auto;height:auto;object-fit:contain;transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .25s ease-out,opacity .28s,filter .28s;will-change:transform}
+.viewer__img.is-swapping{opacity:0;filter:blur(6px)}
+.viewer__hint{position:absolute;left:16px;bottom:14px;font:500 .72rem/1 var(--f-mono);color:var(--ink-3)}
+.info{display:flex;flex-direction:column;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:24px;box-shadow:var(--shadow)}
+.info__where{font:600 .72rem/1.35 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--accent-text)}
+.info h3{font-size:1.65rem;line-height:1.12;font-weight:700}
+.info__meta{display:inline-flex;align-self:flex-start;font:600 .78rem/1 var(--f-mono);font-variant-numeric:tabular-nums;color:var(--ink);background:var(--accent-tint);border-radius:999px;padding:7px 11px}
+.info__line{color:var(--ink-2)}
+.chips{list-style:none;margin:auto 0 0;padding:14px 0 0;display:grid;gap:8px;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));border-top:1px solid var(--line)}
+.chip{width:100%;display:flex;align-items:center;gap:10px;text-align:left;font:600 .8rem/1.25 var(--f-body);color:var(--ink);background:var(--surface-2);border:1.5px solid transparent;border-radius:12px;padding:6px 10px 6px 6px;cursor:pointer;transition:border-color .15s,transform .15s}
+.chip:hover{border-color:var(--line-2);transform:translateY(-1px)}
+.chip[aria-pressed="true"]{border-color:var(--gold)}
+.chip img{flex:none;width:44px;height:36px;object-fit:contain}
+
+/* ---------- spot the wrong fix ---------- */
+.fixes{display:grid;gap:24px;grid-template-columns:minmax(0,1fr)}
+@media (min-width:900px){.fixes{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.fix{perspective:1400px;display:grid}
+.fix__inner{height:100%}
+.fix__inner{display:grid;transition:transform .6s cubic-bezier(.3,.7,.2,1);transform-style:preserve-3d}
+.fix.is-flipped .fix__inner{transform:rotateY(180deg)}
+.face{grid-area:1/1;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column}
+.face--back{transform:rotateY(180deg)}
+.face__fig{margin:0;height:clamp(170px,18vw,220px);padding:18px 22px 4px;background:radial-gradient(75% 70% at 50% 62%,var(--surface-2),var(--surface) 75%)}
+.face__fig img{display:block;width:100%;height:100%;object-fit:contain}
+.face__body{flex:1;display:flex;flex-direction:column;gap:10px;padding:16px 24px 24px}
+.face__kicker{font:600 .72rem/1.35 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--accent-text)}
+.face h3{font-size:1.45rem;line-height:1.12;font-weight:700}
+.face__place{font:500 .88rem/1.4 var(--f-body);color:var(--ink-3)}
+.face__story{color:var(--ink-2)}
+.face__q{margin-top:4px;font:600 .95rem/1.4 var(--f-body)}
+.answers{display:grid;gap:8px;margin-top:auto}
+.answer{text-align:left;font:500 .92rem/1.4 var(--f-body);color:var(--ink);background:var(--surface-2);border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;transition:border-color .15s,transform .15s}
+.answer:hover{border-color:var(--gold);transform:translateY(-1px)}
+.verdict{display:inline-flex;align-self:flex-start;align-items:center;gap:8px;font:700 .8rem/1 var(--f-mono);letter-spacing:.05em;text-transform:uppercase;padding:8px 12px;border-radius:999px}
+.verdict.is-ok{background:var(--ok-tint);color:var(--ok)}
+.verdict.is-bad{background:var(--live-tint);color:var(--live)}
+.picked{font:600 1rem/1.4 var(--f-body)}
+.picked.is-bad{text-decoration:line-through;text-decoration-color:var(--live);text-decoration-thickness:2px}
+.face__label{font:600 .66rem/1.3 var(--f-mono);letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
+.face__meta{font:600 .78rem/1.2 var(--f-mono);color:var(--ink-2)}
+.face__back-btn{margin-top:auto;align-self:flex-start}
+.fixes__score{margin-top:20px;font:600 .85rem/1.4 var(--f-mono);color:var(--ink-2)}
+
+/* ---------- marker distance ---------- */
+.marker{display:grid;gap:40px;align-items:center;grid-template-columns:minmax(0,1fr)}
+@media (min-width:920px){.marker{grid-template-columns:minmax(0,1fr) auto}}
+.marker .sec__head{margin-bottom:0}
+.ctrl{margin-top:28px;display:grid;gap:12px;max-width:34rem}
+.ctrl label{font:600 .8rem/1.3 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.ctrl input[type=range]{width:100%;accent-color:var(--gold)}
+.ctrl__read{font:500 .95rem/1.5 var(--f-body);color:var(--ink-2)}
+.ctrl__read b{font-family:var(--f-mono);font-variant-numeric:tabular-nums;color:var(--ink)}
+.meter{position:relative;height:10px;border-radius:5px;background:var(--line)}
+.meter__fill{position:absolute;inset:0 auto 0 0;width:var(--f,0%);border-radius:5px;background:var(--live);transition:width .15s,background-color .2s}
+.meter.is-ok .meter__fill{background:var(--ok)}
+.meter__mark{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--ink);left:var(--m)}
+.meter__scale{display:flex;justify-content:space-between;font:500 .7rem/1 var(--f-mono);color:var(--ink-3)}
+.phone{justify-self:center;width:250px;border-radius:38px;padding:12px;background:#0b111d;box-shadow:0 0 0 2px #2a3447,0 30px 60px rgba(3,7,16,.35)}
+.phone__screen{position:relative;height:470px;border-radius:28px;overflow:hidden;background:radial-gradient(120% 80% at 50% 60%,#d9cfbd,#b9ad97);display:grid;place-items:center}
+.phone__grain{position:absolute;inset:0;background:repeating-linear-gradient(92deg,rgba(255,255,255,.05) 0 3px,rgba(0,0,0,.03) 3px 7px)}
+.phone__card{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-4deg);box-shadow:0 6px 14px rgba(0,0,0,.25);border-radius:3px;transition:width .15s}
+.phone__scene{position:absolute;left:50%;transform:translateX(-50%);opacity:0;transition:opacity .35s,transform .35s;filter:drop-shadow(0 10px 10px rgba(40,30,15,.3));pointer-events:none}
+.phone.is-placed .phone__scene{opacity:1}
+.phone__status{position:absolute;left:12px;right:12px;top:14px;z-index:2;text-align:center;font:600 .78rem/1.2 var(--f-body);color:#fff;background:rgba(15,21,35,.86);border-radius:10px;padding:9px 10px}
+.phone__status.is-ok{background:rgba(23,134,74,.92)}
+.phone__bar{position:absolute;left:50%;bottom:10px;width:80px;height:4px;margin-left:-40px;border-radius:2px;background:rgba(255,255,255,.6)}
+
+/* ---------- heights wall + wire colours ---------- */
+.practice{display:grid;gap:40px;grid-template-columns:minmax(0,1fr);align-items:start}
+@media (min-width:960px){.practice{grid-template-columns:minmax(0,1fr) minmax(0,1.05fr)}}
+.devices{list-style:none;margin:24px 0 0;padding:0;border-top:1px solid var(--line)}
+.devices li{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);color:var(--ink-2)}
+.devices b{font-weight:600;color:var(--ink)}
+.devices .h{font:600 .9rem/1 var(--f-mono);font-variant-numeric:tabular-nums;color:var(--ink-3)}
+.devices li.is-set .h{color:var(--ok)}
+.wall-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.wall-msg{margin-top:14px;font-weight:600;color:var(--ok);min-height:1.6em}
+.wall{background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:14px}
+.wall svg{display:block;width:100%;height:auto;touch-action:none}
+.w-bg{fill:var(--surface-2)}
+.w-floor{fill:var(--line-2)}
+.w-tick{stroke:var(--ink-3);stroke-width:1}
+.w-label{fill:var(--ink-3);font:500 11px "JetBrains Mono",monospace}
+.w-target{stroke:var(--gold);stroke-width:1.5;stroke-dasharray:4 4;opacity:0;transition:opacity .2s}
+.wall.show-hints .w-target{opacity:.9}
+.dev{cursor:grab;outline:none}
+.dev:active{cursor:grabbing}
+.dev .d-body{stroke:#1d283e;stroke-width:1.5}
+.dev:focus-visible .d-ring{stroke:var(--gold-hi);stroke-width:3}
+.d-ring{fill:none;stroke:transparent}
+.dev.is-set .d-ring{stroke:var(--ok);stroke-width:2.5}
+.d-tag{font:600 12px "JetBrains Mono",monospace;fill:var(--ink)}
+.dev.is-set .d-tag{fill:var(--ok)}
+.wires{margin-top:56px}
+.wires h3{font-size:1.25rem;font-weight:700;margin-bottom:14px}
+.wire-btns{display:flex;flex-wrap:wrap;gap:10px}
+.wbtn{display:inline-flex;align-items:center;gap:9px;font:600 .88rem/1 var(--f-body);color:var(--ink);background:var(--surface);border:1.5px solid var(--line);border-radius:999px;padding:9px 14px;cursor:pointer}
+.wbtn[aria-pressed="true"]{border-color:var(--gold);background:var(--accent-tint)}
+.sw{width:34px;height:12px;border-radius:6px;box-shadow:inset 0 -3px 4px rgba(0,0,0,.25),inset 0 2px 2px rgba(255,255,255,.22),0 0 0 1px var(--sw-ring)}
+.sw--l1{background:#161616}.sw--l2{background:#c62828}
+.sw--g{background:linear-gradient(90deg,#2f8f40 0 58%,#e8c81c 58% 72%,#2f8f40 72%)}
+.sw--t{background:#f0c419}.sw--n{background:#e9e9e4}
+.wire-detail{margin-top:14px;padding:16px 18px;border-radius:14px;background:var(--surface);border:1px solid var(--line);color:var(--ink-2);max-width:62ch}
+.wire-detail b{color:var(--ink)}
+
+/* ---------- classroom ---------- */
+.seg{display:inline-flex;padding:4px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line);margin-bottom:22px}
+.seg button{font:600 .88rem/1 var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:999px;padding:11px 18px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--fill);color:#fff}
+.side{display:grid;gap:24px;grid-template-columns:minmax(0,1fr);align-items:start}
+@media (min-width:900px){.side{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+.feat{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.feat li{display:grid;grid-template-columns:2.2rem minmax(0,1fr);gap:12px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;color:var(--ink-2);transition:transform .15s,border-color .15s}
+.feat li:hover{transform:translateX(4px);border-color:var(--line-2)}
+.feat b{display:block;color:var(--ink);font-weight:600;margin-bottom:2px}
+.feat i{display:grid;place-items:center;width:2.2rem;height:2.2rem;border-radius:10px;background:var(--accent-tint);color:var(--accent-text);font:700 .8rem/1 var(--f-mono);font-style:normal}
+.samples{list-style:none;margin:0;padding:0;display:grid;gap:12px;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.sample{display:flex;flex-direction:column;justify-content:space-between;min-height:190px;border-radius:16px;overflow:hidden;background:linear-gradient(120deg,#1d283e,#354566);color:#fff;padding:14px;transition:transform .2s}
+.sample:hover{transform:translateY(-4px) rotate(-.6deg)}
+.sample__title{font:700 .95rem/1.25 var(--f-body)}
+.sample__sub{font:400 .76rem/1.4 var(--f-body);color:rgba(255,255,255,.62)}
+.sample img{align-self:flex-end;height:96px;width:auto;object-fit:contain}
+.side__note{margin-top:12px;font-size:.85rem;color:var(--ink-3)}
+
+/* ---------- build band ---------- */
+.band{background:var(--band);color:var(--band-ink);padding-block:clamp(64px,8vw,104px)}
+.band h2{max-width:26ch;margin-top:14px}
+.nums{list-style:none;margin:40px 0 0;padding:0;display:grid;gap:28px;grid-template-columns:minmax(0,1fr)}
+@media (min-width:760px){.nums{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.nums li{display:grid;gap:10px;align-content:start;padding-top:18px;border-top:1px solid rgba(255,255,255,.16)}
+.nums strong{font:700 clamp(2.4rem,1.6rem + 2.4vw,3.4rem)/1 var(--f-display);color:var(--band-gold);font-variant-numeric:tabular-nums}
+.nums span{color:var(--band-ink-2);max-width:32ch}
+.stack{margin-top:44px;font:500 .8rem/1.9 var(--f-mono);color:var(--band-ink-2);max-width:90ch}
+.foot{background:var(--band-2);color:var(--band-ink-2);padding-block:32px}
+.foot__in{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px 28px}
+.foot img{display:block;width:112px;height:auto}
+.foot p{font-size:.85rem;max-width:60ch}
+
+/* ---------- from the first page ---------- */
+/* how a paper works */
+.how{display:grid;gap:40px;grid-template-columns:minmax(0,1fr);align-items:start}
+@media (min-width:920px){.how{grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:56px}}
+.steps{list-style:none;margin:0;padding:0;counter-reset:step}
+.steps li{counter-increment:step;display:grid;grid-template-columns:3.2rem minmax(0,1fr);gap:4px 18px;padding:22px 0;border-top:1px solid var(--line)}
+.steps li:last-child{border-bottom:1px solid var(--line)}
+.steps li::before{content:counter(step);grid-row:span 2;font:700 2.4rem/1 var(--f-display);color:var(--accent-text)}
+.steps h3{font-size:1.3rem;line-height:1.25;font-weight:700}
+.steps p{color:var(--ink-2);max-width:56ch}
+.scorecard{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px;box-shadow:var(--shadow);display:grid;gap:16px}
+.scorecard table{width:100%;border-collapse:collapse}
+.scorecard th{font:500 .92rem/1.4 var(--f-body);text-align:left;padding:10px 12px 10px 0;color:var(--ink);border-top:1px solid var(--line)}
+.scorecard td{padding:10px 0;border-top:1px solid var(--line);width:46%}
+.bar{display:flex;align-items:center;gap:10px;font:600 .9rem/1 var(--f-mono);font-variant-numeric:tabular-nums}
+.bar i{display:block;height:8px;border-radius:4px;background:var(--line);flex:1 1 auto;position:relative;overflow:hidden}
+.bar i::before{content:"";position:absolute;inset:0 auto 0 0;width:var(--w);background:var(--gold);border-radius:4px}
+.bar b{width:1.6rem;text-align:right}
+.scorecard ul{margin:0;padding:0 0 0 18px;display:grid;gap:8px;color:var(--ink-2);font-size:.92rem}
+.scorecard ul li::marker{color:var(--accent-text)}
+
+/* curriculum as a panel schedule */
+.quarters{display:grid;gap:24px;grid-template-columns:minmax(0,1fr);align-items:start}
+@media (min-width:1080px){.quarters{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;box-shadow:var(--shadow)}
+.panel__head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;padding:14px 18px;background:var(--fill);color:#fff}
+.panel__q{font:700 1.15rem/1.2 var(--f-display)}
+.panel__theme{flex:1 1 12rem;font:500 .9rem/1.35 var(--f-body);color:rgba(255,255,255,.78)}
+.panel__count{font:500 .7rem/1.2 var(--f-mono);letter-spacing:.07em;text-transform:uppercase;color:var(--gold-hi)}
+.panel table{width:100%;border-collapse:collapse}
+.panel thead th{font:600 .66rem/1 var(--f-mono);letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);text-align:left;padding:10px 14px;background:var(--surface-2);border-bottom:1px solid var(--line)}
+.panel tbody th,.panel tbody td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:middle;text-align:left}
+.panel tbody tr:last-child>*{border-bottom:0}
+.panel .no{width:3.4rem;font:600 .8rem/1 var(--f-mono);color:var(--ink-3)}
+.panel .pts{width:3.6rem;text-align:right;font:600 .95rem/1 var(--f-mono);font-variant-numeric:tabular-nums}
+.panel thead .pts{font-size:.66rem}
+.les{display:flex;align-items:center;gap:14px}
+.les__txt{flex:1 1 auto;min-width:0;display:grid;gap:3px}
+.les__t{font:600 .95rem/1.35 var(--f-body)}
+.les__p{font:400 .82rem/1.45 var(--f-body);color:var(--ink-3)}
+.les__p b{font-weight:600;color:var(--accent-text)}
+.les img{flex:none;width:78px;height:56px;object-fit:contain}
+.panel .is-problem{background:var(--accent-tint)}
+.panel .is-problem .no{color:var(--accent-text)}
+@media (max-width:520px){.les img{width:54px;height:42px}.panel tbody th,.panel tbody td,.panel thead th{padding-inline:10px}.panel .no{width:2.6rem}}
+
+.facts{margin:28px 0 0;border-top:1px solid var(--line)}
+.facts div{display:grid;grid-template-columns:minmax(0,8rem) minmax(0,1fr);gap:16px;padding:14px 0;border-bottom:1px solid var(--line)}
+.facts dt{font:600 1.05rem/1.35 var(--f-display);color:var(--ink)}
+.facts dd{margin:0;color:var(--ink-2)}
+@media (max-width:440px){.facts div{grid-template-columns:minmax(0,1fr);gap:2px}}
+/* Philippine practice, as a spec sheet */
+.sheet{margin:0;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow)}
+.sheet__row{display:grid;grid-template-columns:minmax(0,1fr);gap:6px;padding:18px 22px;border-bottom:1px solid var(--line)}
+.sheet__row:last-child{border-bottom:0}
+@media (min-width:760px){.sheet__row{grid-template-columns:13rem minmax(0,1fr);gap:28px}}
+.sheet dt{font:600 .72rem/1.6 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.sheet dd{margin:0;color:var(--ink-2);max-width:68ch}
+.sheet dd strong{color:var(--ink);font-weight:600}
+.sheet__note{font-size:.86rem;color:var(--ink-3)}
+.how-wrap{margin-top:clamp(48px,7vw,80px)}
+.how-wrap h3.sub,.spec h3.sub{font:700 1.4rem/1.2 var(--f-display);margin-bottom:20px}
+.spec{margin-top:56px}
+.phones-facts{max-width:34rem}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+  .wire-bead,.fx-flow{animation:none!important}
+  .fix.is-flipped .fix__inner{transform:none}
+  .fix .face--back{transform:none}
+  .fix:not(.is-flipped) .face--back,.fix.is-flipped .face--front{visibility:hidden}
+  .viewer__img{transform:none!important}
+}
+</style>
+
+</head>
+<body>
+<header class="nav">
+  <div class="wrap nav__in">
+    <a class="nav__brand" href="#top"><img src="img/wordmark-white.webp" width="560" height="89" alt="ElectAR"></a>
+    <nav class="nav__links" aria-label="Page sections">
+      <a href="#play">Play</a><a href="#curriculum">Curriculum</a><a href="#scenes">Scenes</a><a href="#fixes">Problems</a><a href="#marker">Phones</a><a href="#practice">Practice</a><a href="#classroom">Classroom</a>
+    </nav>
+  </div>
+  <div class="nav__gauge" id="gauge" aria-hidden="true"></div>
+</header>
+
+<main>
+<section class="hero" id="top" aria-labelledby="hero-h">
+  <div class="wrap hero__grid">
+    <div>
+      <p class="eyebrow eyebrow--band">Senior High TVL · Electrical Installation and Maintenance</p>
+      <h1 id="hero-h">Learn the wiring by <span class="ar">doing</span> the wiring.</h1>
+      <p class="hero__lead">ElectAR puts real job sites on the classroom floor and lets students make every call an electrician makes. This booth works: flip the breaker or either stair switch and watch the lamp.</p>
+      <div class="hero__cta">
+        <a class="btn btn--gold" href="#play">Play a full sample</a>
+        <a class="btn btn--ghost" href="#scenes">Explore the scenes</a>
+      </div>
+      <ul class="hero__facts">
+        <li><strong data-count="18">18</strong><span>AR scenes</span></li>
+        <li><strong data-count="211">211</strong><span>Graded decisions</span></li>
+        <li><strong data-count="4">4</strong><span>Quarterly problems</span></li>
+        <li><strong>EN · FIL</strong><span>Languages</span></li>
+      </ul>
+    </div>
+    <div class="bench">
+      <div class="view is-live is-lit" id="live" role="group" aria-label="3-way switching booth you can operate">
+        <div class="view__plane" aria-hidden="true"></div>
+        <img class="view__booth" src="img/booth-3way.webp" width="1265" height="1473" alt="3D render of the 3-way switching booth: orange conduit on a plywood wall, a lamp, switches S3-A and S3-B, a panel with a 2-pole breaker, and a bench of tools.">
+        <svg class="view__svg" viewBox="0 0 1265 1473" aria-hidden="true">
+          <defs><radialGradient id="glow-g"><stop offset="0" stop-color="#fffbe6"/><stop offset=".3" stop-color="#ffe8a0" stop-opacity=".8"/><stop offset="1" stop-color="#ffd25e" stop-opacity="0"/></radialGradient></defs>
+          <g class="wire wire--feed" id="w-feed"></g>
+          <g class="wire wire--lamp" id="w-lamp"></g>
+          <circle class="glow" cx="456" cy="289" r="110" fill="url(#glow-g)"/>
+        </svg>
+        <span class="pin" style="left:68.4%;top:29.3%"></span>
+        <span class="pin" style="left:24.25%;top:45.2%"></span>
+        <span class="pin" style="left:57.76%;top:40.3%"></span>
+        <button type="button" class="hs hs--l" id="hs-breaker" style="left:68.4%;top:29.3%" data-on="true"><span class="hs__state" id="hs-breaker-s">ON</span>Breaker</button>
+        <button type="button" class="hs hs--d" id="hs-a" style="left:24.25%;top:45.2%" data-pos="UP"><span class="rocker" aria-hidden="true"></span>S3-A <span class="hs__state" id="hs-a-s">UP</span></button>
+        <button type="button" class="hs hs--r" id="hs-b" style="left:57.76%;top:40.3%" data-pos="UP"><span class="rocker" aria-hidden="true"></span>S3-B <span class="hs__state" id="hs-b-s">UP</span></button>
+      </div>
+      <div class="card3">
+        <div class="card3__top"><p class="card3__title">Test card · lamp from 2 places</p><p class="card3__count" id="card3-count">1 of 4 tried</p></div>
+        <table>
+          <thead><tr><th scope="col">S3-A</th><th scope="col">S3-B</th><th scope="col">Lamp</th><th scope="col"><span class="visually-hidden">Tried</span></th></tr></thead>
+          <tbody id="card3-rows"></tbody>
+        </table>
+        <p class="card3__msg" id="card3-msg" aria-live="polite">Flip either switch. The lamp should change at every flip, from either end.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="play" aria-labelledby="play-h">
+  <div class="wrap">
+    <header class="sec__head rv">
+      <p class="eyebrow">Play the sample</p>
+      <h2 id="play-h">Six decisions, three choices each, and the first try counts</h2>
+      <p class="lead">This is the 3-way sample from the app’s Home screen, with its own wording, Filipino translation and scoring: 10 points a decision, 5 off for each different wrong choice. Wrong choices play out on the booth and explain themselves.</p>
+    </header>
+    <div class="stage rv" id="stage" role="region" aria-label="Playable sample: 3-way switching">
+      <div class="stage__field" id="field">
+        <div class="stage__plane" aria-hidden="true"></div>
+        <img class="stage__booth" id="booth" src="img/booth-3way.webp" width="1265" height="1473" alt="The same 3-way switching booth, used for the six-decision sample.">
+        <svg class="stage__svg" id="svg" aria-hidden="true">
+          <defs><radialGradient id="lamp-glow"><stop offset="0" stop-color="#fffbe6"/><stop offset=".3" stop-color="#ffe8a0" stop-opacity=".8"/><stop offset="1" stop-color="#ffd25e" stop-opacity="0"/></radialGradient></defs>
+          <g id="g-power"></g><g id="g-marks"></g><g id="g-fx"></g>
+        </svg>
+      </div>
+      <div class="hud" id="hud">
+        <p class="hud__title" id="hud-title">3-Way Switch: Lamp From 2 Places (Sample AR)</p>
+        <div class="hud__count"><span class="cells" id="cells" aria-hidden="true"></span><span id="hud-count">Decision 1 of 6</span></div>
+        <p class="hud__instr" id="hud-instr">The run is pulled and the ends are stripped. CKT 2’s breaker is ON. Before your hands go near a conductor:</p>
+      </div>
+      <div class="hud-side" id="hud-side">
+        <div class="lang" role="group" aria-label="Language">
+          <button type="button" id="lang-en" aria-pressed="true" lang="en">EN</button>
+          <button type="button" id="lang-fil" aria-pressed="false" lang="fil">FIL</button>
+        </div>
+        <p class="score" id="score">Score 0/60</p>
+      </div>
+      <div class="opts" id="opts"></div>
+      <div class="fb is-brief" id="fb" aria-live="polite"></div>
+    </div>
+    <div class="how-wrap rv">
+      <h3 class="sub">How a paper works</h3>
+      <div class="how">
+      <ol class="steps">
+        <li><h3>Place the scene</h3><p>ARCore sets it on the floor or a wall. On phones without ARCore, a printed marker card holds it in place on the desk.</p></li>
+        <li><h3>Make the call</h3><p>Three buttons sit beside three different objects: the breaker, the tester, the tape. Every wrong option is wrong for a reason the author wrote down, and the app plays it out before that reason appears.</p></li>
+        <li><h3>Watch the step happen</h3><p>The breaker opens, the travellers land, current runs along the conduit. The buttons step aside while it plays, then the next decision appears beside its own objects.</p></li>
+      </ol>
+      <aside class="scorecard" aria-labelledby="score-h">
+        <p class="eyebrow" id="score-h">Points per decision</p>
+        <table>
+          <tr><th scope="row">Right on the first try</th><td><span class="bar"><i style="--w:100%"></i><b>10</b></span></td></tr>
+          <tr><th scope="row">Right after one wrong choice</th><td><span class="bar"><i style="--w:50%"></i><b>5</b></span></td></tr>
+          <tr><th scope="row">Right after both wrong choices</th><td><span class="bar"><i style="--w:0%"></i><b>0</b></span></td></tr>
+        </table>
+        <ul>
+          <li>A decision never drops below zero, and picking the same wrong option twice costs nothing more.</li>
+          <li>Repositioning the scene keeps every mistake, so it can’t be used to start clean.</li>
+          <li>Pass mark for an AR paper: 70%.</li>
+        </ul>
+      </aside>
+    </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec sec--alt" id="curriculum" aria-labelledby="cur-h">
+  <div class="wrap">
+    <header class="sec__head rv">
+      <p class="eyebrow">Curriculum</p>
+      <h2 id="cur-h">A full year of EIM, filed by quarter</h2>
+      <p class="lead">Twelve lessons and four quarterly problems. Lessons open in order, and a lesson’s paper unlocks once its reading is finished. Most AR lessons carry their scene twice: as ungraded practice inside the lesson, and as the graded paper.</p>
+    </header>
+    <div class="quarters">
+      <article class="panel" aria-labelledby="q1-h">
+        <header class="panel__head"><h3 class="panel__q" id="q1-h">Quarter 1</h3><p class="panel__theme">Conduit, cable and branch circuits</p><p class="panel__count">4 lessons · 1 problem</p></header>
+        <table>
+          <thead><tr><th scope="col" class="no">No.</th><th scope="col">Lesson and paper</th><th scope="col" class="pts">Pts</th></tr></thead>
+          <tbody>
+            <tr><th scope="row" class="no">L1</th><td><div class="les"><div class="les__txt"><span class="les__t">Electrical System Installation and PEC Standards</span><span class="les__p">Quiz · 15 items</span></div></div></td><td class="pts">15</td></tr>
+            <tr><th scope="row" class="no">L2</th><td><div class="les"><div class="les__txt"><span class="les__t">Electrical Systems: Installation and Wiring</span><span class="les__p">Quiz · 15 items, plus <b>AR practice</b>: a 90° stub-up</span></div><img src="img/sample-bending.webp" width="572" height="721" alt="" loading="lazy"></div></td><td class="pts">15</td></tr>
+            <tr><th scope="row" class="no">L3</th><td><div class="les"><div class="les__txt"><span class="les__t">Electrical Conduit Installation Procedures</span><span class="les__p"><b>AR paper</b> · PVC cutting and reaming, then solvent welding · 15 decisions</span></div><img src="img/scene-cutting.webp" width="1006" height="430" alt="" loading="lazy"></div></td><td class="pts">150</td></tr>
+            <tr><th scope="row" class="no">L4</th><td><div class="les"><div class="les__txt"><span class="les__t">Electrical Cable Pulling</span><span class="les__p">Quiz · 15 items</span></div></div></td><td class="pts">15</td></tr>
+            <tr class="is-problem"><th scope="row" class="no">Q1</th><td><div class="les"><div class="les__txt"><span class="les__t">“The Extension Cord Across the Yard”</span><span class="les__p"><b>Quarterly problem</b> · AR paper · 36 decisions</span></div><img src="img/scene-branch.webp" width="910" height="743" alt="" loading="lazy"></div></td><td class="pts">360</td></tr>
+          </tbody>
+        </table>
+      </article>
+      <article class="panel" aria-labelledby="q2-h">
+        <header class="panel__head"><h3 class="panel__q" id="q2-h">Quarter 2</h3><p class="panel__theme">Protective and wiring devices</p><p class="panel__count">4 lessons · 1 problem</p></header>
+        <table>
+          <thead><tr><th scope="col" class="no">No.</th><th scope="col">Lesson and paper</th><th scope="col" class="pts">Pts</th></tr></thead>
+          <tbody>
+            <tr><th scope="row" class="no">L1</th><td><div class="les"><div class="les__txt"><span class="les__t">Protective Devices</span><span class="les__p">Quiz · 15 items</span></div></div></td><td class="pts">15</td></tr>
+            <tr><th scope="row" class="no">L2</th><td><div class="les"><div class="les__txt"><span class="les__t">Installing and Testing Protective Devices</span><span class="les__p"><b>AR paper</b> and practice · 31 decisions</span></div><img src="img/scene-protective.webp" width="813" height="772" alt="" loading="lazy"></div></td><td class="pts">310</td></tr>
+            <tr><th scope="row" class="no">L3</th><td><div class="les"><div class="les__txt"><span class="les__t">Wiring Devices for Floor and Wall Mount</span><span class="les__p">Quiz · 15 items</span></div></div></td><td class="pts">15</td></tr>
+            <tr><th scope="row" class="no">L4</th><td><div class="les"><div class="les__txt"><span class="les__t">Installing Wiring Devices</span><span class="les__p"><b>AR paper</b> and practice · 16 decisions</span></div><img src="img/scene-wiring.webp" width="793" height="873" alt="" loading="lazy"></div></td><td class="pts">160</td></tr>
+            <tr class="is-problem"><th scope="row" class="no">Q2</th><td><div class="les"><div class="les__txt"><span class="les__t">“The Washing Machine That Bites”</span><span class="les__p"><b>Quarterly problem</b> · AR paper · 29 decisions</span></div><img src="img/scene-laundry.webp" width="910" height="634" alt="" loading="lazy"></div></td><td class="pts">290</td></tr>
+          </tbody>
+        </table>
+      </article>
+      <article class="panel" aria-labelledby="q3-h">
+        <header class="panel__head"><h3 class="panel__q" id="q3-h">Quarter 3</h3><p class="panel__theme">Fire detection and alarm system</p><p class="panel__count">2 lessons · 1 problem</p></header>
+        <table>
+          <thead><tr><th scope="col" class="no">No.</th><th scope="col">Lesson and paper</th><th scope="col" class="pts">Pts</th></tr></thead>
+          <tbody>
+            <tr><th scope="row" class="no">L1</th><td><div class="les"><div class="les__txt"><span class="les__t">FDAS Devices and Wiring Diagrams</span><span class="les__p">Quiz · 15 items</span></div></div></td><td class="pts">15</td></tr>
+            <tr><th scope="row" class="no">L2</th><td><div class="les"><div class="les__txt"><span class="les__t">Installing and Testing an FDAS</span><span class="les__p"><b>AR paper</b> and practice · 18 decisions</span></div><img src="img/scene-fdas.webp" width="780" height="887" alt="" loading="lazy"></div></td><td class="pts">180</td></tr>
+            <tr class="is-problem"><th scope="row" class="no">Q3</th><td><div class="les"><div class="les__txt"><span class="les__t">“The Alarm That Rings Every Morning”</span><span class="les__p"><b>Quarterly problem</b> · AR paper · 22 decisions</span></div><img src="img/scene-bakery.webp" width="992" height="575" alt="" loading="lazy"></div></td><td class="pts">220</td></tr>
+          </tbody>
+        </table>
+      </article>
+      <article class="panel" aria-labelledby="q4-h">
+        <header class="panel__head"><h3 class="panel__q" id="q4-h">Quarter 4</h3><p class="panel__theme">Closed-circuit television</p><p class="panel__count">2 lessons · 1 problem</p></header>
+        <table>
+          <thead><tr><th scope="col" class="no">No.</th><th scope="col">Lesson and paper</th><th scope="col" class="pts">Pts</th></tr></thead>
+          <tbody>
+            <tr><th scope="row" class="no">L1</th><td><div class="les"><div class="les__txt"><span class="les__t">CCTV Devices and Wiring Diagrams</span><span class="les__p">Quiz · 15 items</span></div></div></td><td class="pts">15</td></tr>
+            <tr><th scope="row" class="no">L2</th><td><div class="les"><div class="les__txt"><span class="les__t">Installing and Testing CCTV</span><span class="les__p"><b>AR paper</b> and practice · 19 decisions</span></div><img src="img/scene-cctv.webp" width="761" height="874" alt="" loading="lazy"></div></td><td class="pts">190</td></tr>
+            <tr class="is-problem"><th scope="row" class="no">Q4</th><td><div class="les"><div class="les__txt"><span class="les__t">“The Camera That Saw Nothing”</span><span class="les__p"><b>Quarterly problem</b> · AR paper · 25 decisions</span></div><img src="img/scene-hardware.webp" width="1003" height="679" alt="" loading="lazy"></div></td><td class="pts">250</td></tr>
+          </tbody>
+        </table>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="scenes" aria-labelledby="sc-h">
+  <div class="wrap">
+    <header class="sec__head rv">
+      <p class="eyebrow">Scenes</p>
+      <h2 id="sc-h">Every quarter has a job site to walk around</h2>
+      <p class="lead">Each scene is modelled to real dimensions and placed in the room with ARCore or on a printed marker. Pick a quarter, then a scene, and move your pointer over it.</p>
+    </header>
+    <div class="tabs" id="tabs" role="group" aria-label="Quarter"></div>
+    <div class="explorer rv">
+      <div class="viewer" id="viewer">
+        <img class="viewer__img" id="viewer-img" src="img/scene-branch.webp" width="910" height="743" alt="">
+        <p class="viewer__hint" aria-hidden="true">Move to tilt</p>
+      </div>
+      <div class="info" aria-live="polite">
+        <p class="info__where" id="info-where"></p>
+        <h3 id="info-title"></h3>
+        <p class="info__meta" id="info-meta"></p>
+        <p class="info__line" id="info-line"></p>
+        <ul class="chips" id="chips" aria-label="Scenes in this quarter"></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec sec--alt" id="fixes" aria-labelledby="fx-h">
+  <div class="wrap">
+    <header class="sec__head rv">
+      <p class="eyebrow">Quarterly problems</p>
+      <h2 id="fx-h">Can you spot the wrong fix?</h2>
+      <p class="lead">Every quarter ends with a brief from a Philippine barangay. Somebody has already suggested a fix that sounds sensible. Pick what you would do, then turn the card.</p>
+    </header>
+    <div class="fixes" id="fix-list"></div>
+    <p class="fixes__score" id="fix-score" aria-live="polite">0 of 4 answered</p>
+  </div>
+</section>
+
+<section class="sec" id="marker" aria-labelledby="mk-h">
+  <div class="wrap marker">
+    <div>
+      <header class="sec__head rv">
+        <p class="eyebrow">Phones</p>
+        <h2 id="mk-h">No ARCore? Bring the phone closer.</h2>
+        <p class="lead">On phones that ARCore doesn’t support, ElectAR tracks a printed card with a 36 mm code. It only trusts the card once the code fills about a third of the camera’s view. Slide the phone in and see where that happens.</p>
+      </header>
+      <div class="ctrl">
+        <label for="dist">Phone distance from the card</label>
+        <input type="range" id="dist" min="6" max="30" step="0.5" value="22">
+        <div class="meter" id="meter" style="--m:35%"><div class="meter__fill" id="meter-fill"></div><div class="meter__mark" aria-hidden="true"></div></div>
+        <div class="meter__scale" aria-hidden="true"><span>Code fills 0%</span><span>35% needed</span><span>100%</span></div>
+        <p class="ctrl__read" id="dist-read"></p>
+      </div>
+      <div class="phones-facts"><dl class="facts">
+        <div><dt>36 mm</dt><dd>The black square on each card. Lay it flat and hold the phone about 10 cm away.</dd></div>
+        <div><dt>9 per A4</dt><dd>The cards ship inside the app as a PDF. Print at 100%, never fit to page.</dd></div>
+        <div><dt>Self-sizing</dt><dd>Each code carries its own printed size, so the app never has to guess how big the card is.</dd></div>
+        <div><dt>No camera</dt><dd>The same decisions arrive as a question paper instead.</dd></div>
+      </dl></div>
+    </div>
+    <div class="phone" id="phone" aria-hidden="true">
+      <div class="phone__screen" id="phone-screen">
+        <div class="phone__grain"></div>
+        <img class="phone__card" id="phone-card" src="img/marker-card.webp" width="405" height="641" alt="">
+        <img class="phone__scene" id="phone-scene" src="img/booth-3way.webp" width="1265" height="1473" alt="">
+        <p class="phone__status" id="phone-status">Move closer</p>
+        <span class="phone__bar"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec sec--alt" id="practice" aria-labelledby="pr-h">
+  <div class="wrap practice">
+    <div>
+      <header class="sec__head rv">
+        <p class="eyebrow">Philippine practice</p>
+        <h2 id="pr-h">Put each device at its height</h2>
+        <p class="lead">Every ElectAR wall follows the DPWH standard plan for DepEd schools. Drag each device up or down, or focus it and use the arrow keys. It locks when it reaches its height.</p>
+      </header>
+      <ul class="devices" id="dev-list"></ul>
+      <div class="wall-actions">
+        <button type="button" class="btn btn--line" id="hint-btn" aria-pressed="false">Show target lines</button>
+        <button type="button" class="btn btn--line" id="wall-reset">Reset the wall</button>
+      </div>
+      <p class="wall-msg" id="wall-msg" aria-live="polite"></p>
+    </div>
+    <div class="wall" id="wall">
+      <svg id="wall-svg" viewBox="0 0 400 470" role="group" aria-label="Wall elevation from 0 to 2 metres"></svg>
+    </div>
+  </div>
+  <div class="wrap wires">
+    <h3>Tap a conductor</h3>
+    <div class="wire-btns" id="wire-btns" role="group" aria-label="Conductor colours"></div>
+    <p class="wire-detail" id="wire-detail" aria-live="polite"></p>
+    <div class="spec">
+      <h3 class="sub">The rest of the spec</h3>
+      <dl class="sheet">
+      <div class="sheet__row"><dt>Supply</dt><dd><strong>230 V, 60 Hz, single phase, on two lines.</strong> With L1 and L2 both live, an OFF wall switch doesn’t make a lamp safe. Only the 2-pole breaker does, which is why both switching samples open with it.</dd></div>
+      <div class="sheet__row"><dt>Wire and breakers</dt><dd><strong>2.0 mm² is the minimum; plans call for 3.5 mm² THHN.</strong> 15 A breakers on 2.0 mm² lighting circuits, 20 A on 3.5 mm² outlet circuits.</dd></div>
+      <div class="sheet__row"><dt>Raceway</dt><dd><strong>15 mm (½″) at the smallest.</strong> Orange PVC conduit on saddles, or white PVC moulding.</dd></div>
+      <div class="sheet__row"><dt>Switch names</dt><dd><strong>3-way switches control a lamp from two places (S3); a 4-way adds a third (S4).</strong> These are the DepEd and TESDA names, so the app never contradicts the module.</dd></div>
+      <div class="sheet__row"><dt>Language</dt><dd><strong>English or Filipino.</strong> Technical terms stay in English, the way they’re said on the job and in the NC II assessment.</dd></div>
+    </dl>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="classroom" aria-labelledby="cl-h">
+  <div class="wrap">
+    <header class="sec__head rv">
+      <p class="eyebrow">Classroom</p>
+      <h2 id="cl-h">One class, two screens</h2>
+      <p class="lead">Students work in the Android app; teachers run the class from a web desk. A score earned in AR lands in the teacher’s records as soon as the student finishes.</p>
+    </header>
+    <div class="seg" role="group" aria-label="Show features for">
+      <button type="button" id="seg-student" aria-pressed="true">Student app</button>
+      <button type="button" id="seg-teacher" aria-pressed="false">Teacher web</button>
+    </div>
+    <div class="side">
+      <ul class="feat" id="feat-student">
+        <li><i>Q</i><div><b>Lessons by quarter</b>They open in order, and the reader remembers the page.</div></li>
+        <li><i>7</i><div><b>Quizzes in seven formats</b>Multiple choice, true or false, identification, matching, enumeration, essay, and 4 Pics 1 Word.</div></li>
+        <li><i>AR</i><div><b>AR activities and papers</b>Placed with ARCore, or on the printed marker card.</div></li>
+        <li><i>14</i><div><b>Tools &amp; Equipment in 3D</b>From pliers to a fire extinguisher, ready to turn over and inspect.</div></li>
+        <li><i>#1</i><div><b>Trivia and a class leaderboard</b>Plus a to-do list of work from the teacher.</div></li>
+        <li><i>FIL</i><div><b>Filipino, dark mode, notifications</b>Announcements arrive as push notifications with an inbox.</div></li>
+      </ul>
+      <ul class="feat" id="feat-teacher" hidden>
+        <li><i>+</i><div><b>Classes with join codes</b>The teacher approves each student who asks to join.</div></li>
+        <li><i>PDF</i><div><b>Lessons from any deck</b>PowerPoint, Word or PDF, converted for the phone, or built in the Lesson Builder from templates and electrical symbols.</div></li>
+        <li><i>7</i><div><b>Quizzes in the same seven formats</b>With a Filipino version of any question.</div></li>
+        <li><i>✓</i><div><b>Classwork with due dates</b>Late work is marked, and essays are graded and returned.</div></li>
+        <li><i>!</i><div><b>Announcements</b>To the whole class or to chosen students.</div></li>
+        <li><i>%</i><div><b>Progress and scores</b>Time on task, a flag for anyone falling behind, and export to Excel or CSV.</div></li>
+      </ul>
+      <div>
+        <ul class="samples">
+          <li class="sample"><div><p class="sample__title">Pipe Bending</p><p class="sample__sub">90° stub-up with a hand bender</p></div><img src="img/sample-bending.webp" width="572" height="721" alt="" loading="lazy"></li>
+          <li class="sample"><div><p class="sample__title">FDAS Installation</p><p class="sample__sub">Mount, wire and prove a fire alarm system</p></div><img src="img/sample-fdas.webp" width="738" height="823" alt="" loading="lazy"></li>
+          <li class="sample"><div><p class="sample__title">3-Way Switching</p><p class="sample__sub">One lamp switched from two places</p></div><img src="img/booth-3way.webp" width="1265" height="1473" alt="" loading="lazy"></li>
+          <li class="sample"><div><p class="sample__title">4-Way Switching</p><p class="sample__sub">The same lamp, switched from three places</p></div><img src="img/sample-4way.webp" width="1265" height="1473" alt="" loading="lazy"></li>
+        </ul>
+        <p class="side__note">The four AR samples on every student’s Home screen.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="build" aria-labelledby="bd-h">
+  <div class="wrap">
+    <p class="eyebrow eyebrow--band">How it’s built</p>
+    <h2 id="bd-h">Scenes are built by script and checked by machine before they ship</h2>
+    <ul class="nums">
+      <li><strong data-count="12290">12,290</strong><span>geometry checks run on the laundry shop’s exported 3D file</span></li>
+      <li><strong data-count="75">75</strong><span>motion faults its procedure replay caught after the pose checks had passed, all fixed before publishing</span></li>
+      <li><strong data-count="1950">1,950</strong><span>unit tests in the Android app</span></li>
+    </ul>
+    <p class="stack">Kotlin · SceneView and Filament · ARCore · ML Kit and CameraX · Firebase Auth, Firestore and Cloud Messaging · Supabase · React and Vite · Express and LibreOffice · Blender</p>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__in">
+    <img src="img/wordmark-white.webp" width="560" height="89" alt="ElectAR">
+    <p>AR practice for Electrical Installation and Maintenance. Every scene on this page is a render of the app’s own 3D files.</p>
+  </div>
+</footer>
+<style>.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}</style>
+
+<script>
+(() => {
+  'use strict';
+  const $ = (id) => document.getElementById(id);
+  const NS = 'http://www.w3.org/2000/svg';
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function el(tag, attrs, parent) {
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.append(e);
+    return e;
+  }
+  function h(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+
+  // Shared geometry of the 3-way booth render, as fractions of the image (projected from the GLB through the render's camera).
+  const AT = {
+    breaker: [.6840, .2929], switchA: [.2425, .4516], switchB: [.5776, .4033],
+    tailsA: [.2428, .4356], tailBLeg: [.5787, .3886], lamp: [.3571, .1954], tailsLamp: [.3489, .1867],
+    screwdriver: [.3108, .6549], tester: [.3382, .6504], multimeter: [.3848, .6447], tape: [.4694, .6002],
+    coverA: [.2783, .6233], testCard: [.4745, .6273], bulb: [.3609, .1961]
+  };
+  // Conduit centre-lines from the panel: L1 to S3-A, the traveller drop to S3-B, the drop to the lamp.
+  const RUNS = [
+    [[.6686, .2463], [.6727, .0937], [.2221, .1164], [.2317, .4332]],
+    [[.5743, .0979], [.5700, .3862]],
+    [[.3395, .1097], [.3405, .1744]]
+  ];
+
+  /* ---------------- scroll: reveal, nav gauge, counters ---------------- */
+  const gauge = $('gauge');
+  const navLinks = [...document.querySelectorAll('.nav__links a')];
+  function onScroll() {
+    const max = document.documentElement.scrollHeight - innerHeight;
+    gauge.style.setProperty('--p', max > 0 ? Math.min(1, scrollY / max) : 0);
+    let here = null;
+    for (const a of navLinks) { const s = document.querySelector(a.getAttribute('href')); if (s && s.getBoundingClientRect().top < innerHeight * .4) here = a; }
+    navLinks.forEach((a) => a.classList.toggle('is-here', a === here));
+  }
+  addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  function countUp(node) {
+    const end = +node.dataset.count, fmt = (n) => n.toLocaleString('en-US');
+    if (reduced) return;
+    const t0 = performance.now(), dur = 1100;
+    const step = (t) => {
+      const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+      node.textContent = fmt(Math.round(end * e));
+      if (k < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      for (const en of entries) {
+        if (!en.isIntersecting) continue;
+        if (en.target.dataset.count) countUp(en.target); else en.target.classList.add('is-in');
+        io.unobserve(en.target);
+      }
+    }, { threshold: .15 });
+    document.querySelectorAll('.rv,[data-count]').forEach((n) => io.observe(n));
+  }
+
+  /* ---------------- hero: the booth you can switch ---------------- */
+  (() => {
+    const view = $('live'), feed = $('w-feed'), lamp = $('w-lamp');
+    const px = ([fx, fy]) => `${(fx * 1265).toFixed(1)} ${(fy * 1473).toFixed(1)}`;
+    const path = (run, g) => { const d = 'M' + run.map(px).join(' L'); el('path', { d, class: 'wire-halo' }, g); el('path', { d, class: 'wire-bead' }, g); };
+    path(RUNS[0], feed); path(RUNS[1], feed); path(RUNS[2], lamp);
+    const st = { on: true, a: 'UP', b: 'UP' };
+    // the test card the app fills in at decision 6: both UP lit, then every flip changes the lamp
+    const ROWS = [['UP', 'UP'], ['DOWN', 'UP'], ['DOWN', 'DOWN'], ['UP', 'DOWN']];
+    const tried = new Set();
+    const tbody = $('card3-rows'), msg = $('card3-msg'), count = $('card3-count');
+    const bBr = $('hs-breaker'), bA = $('hs-a'), bB = $('hs-b');
+    function render() {
+      const lit = st.on && st.a === st.b;
+      view.classList.toggle('is-live', st.on);
+      view.classList.toggle('is-lit', lit);
+      view.classList.toggle('is-dark', !lit);
+      bBr.dataset.on = String(st.on); $('hs-breaker-s').textContent = st.on ? 'ON' : 'OFF';
+      bA.dataset.pos = st.a; $('hs-a-s').textContent = st.a;
+      bB.dataset.pos = st.b; $('hs-b-s').textContent = st.b;
+      bBr.setAttribute('aria-label', `2-pole breaker, ${st.on ? 'on' : 'off'}. Switch it ${st.on ? 'off' : 'on'}.`);
+      bA.setAttribute('aria-label', `Switch S3-A, ${st.a.toLowerCase()}. Flip it.`);
+      bB.setAttribute('aria-label', `Switch S3-B, ${st.b.toLowerCase()}. Flip it.`);
+      const now = ROWS.findIndex(([a, b]) => a === st.a && b === st.b);
+      if (st.on) tried.add(now);
+      tbody.textContent = '';
+      ROWS.forEach(([a, b], k) => {
+        const tr = h('tr', st.on && k === now ? 'is-now' : '');
+        const on = a === b;
+        tr.append(h('td', '', a), h('td', '', b), h('td', on ? 'lamp-on' : '', on ? 'ON' : 'OFF'), h('td', 'tick', tried.has(k) ? '✓' : ''));
+        tbody.append(tr);
+      });
+      count.textContent = `${tried.size} of 4 tried`;
+      if (!st.on) msg.textContent = 'Breaker off. L1 and L2 are both dead, so no switch position can light the lamp. That’s the only state in which hands go near the wiring.';
+      else if (tried.size === 4) msg.textContent = 'All four positions tried, and the lamp changed at every flip from either end. That’s how the sample’s last decision proves the job.';
+      else msg.textContent = lit ? 'Lamp on. Flip either switch: it should go off.' : 'Lamp off. Flip either switch: it should come back on.';
+    }
+    bBr.addEventListener('click', () => { st.on = !st.on; render(); });
+    bA.addEventListener('click', () => { st.a = st.a === 'UP' ? 'DOWN' : 'UP'; render(); });
+    bB.addEventListener('click', () => { st.b = st.b === 'UP' ? 'DOWN' : 'UP'; render(); });
+    render();
+  })();
+
+  /* ---------------- the six-decision sample (as on the first page) ---------------- */
+  (() => {
+    const DATA = {"title":{"en":"3-Way Switch: Lamp From 2 Places (Sample AR)","fil":"3-Way Switch: Lamp Mula sa 2 Lugar (Sample AR)"},"brief":{"en":"One lamp at the top of a stair is to be switched from the bottom (S3-A) and the top (S3-B). It is fed at 230 V on two LINES, black L1 and red L2, from a 2-pole breaker - the way a Philippine house is. Work the job in order: the button beside an object is what that object does next.","fil":"Ang isang lamp sa taas ng hagdan ay isi-switch mula sa ibaba (S3-A) at sa itaas (S3-B). Pinapakain ito ng 230 V sa dalawang LINE, itim na L1 at pulang L2, mula sa 2-pole breaker - tulad ng sa bahay sa Pilipinas. Gawin ang trabaho nang sunod-sunod: ang button sa tabi ng isang bagay ay ang susunod na gagawin ng bagay na iyon."},"decisions":[{"id":"isolate_both_lines","instruction":{"en":"The run is pulled and the ends are stripped. CKT 2's breaker is ON. Before your hands go near a conductor:","fil":"Nahila na ang run at natalupan na ang mga dulo. Naka-ON ang breaker ng CKT 2. Bago lumapit ang kamay mo sa kahit anong conductor:"},"plays":{"en":"Breaker off and locked. The tester lights on the live outlet, stays dark on L1 and on L2, then lights on the outlet again.","fil":"Naka-off at naka-lock ang breaker. Umiilaw ang tester sa live na outlet, walang ilaw sa L1 at sa L2, saka umiilaw ulit sa outlet."},"options":[{"id":"off_lock_tag_test_both","ok":true,"anchor":"breaker","side":"R","label":{"en":"Off, Lock, Tag, Test Both Lines","fil":"I-off, I-lock, I-tag, I-test ang Dalawang Line"}},{"id":"wall_switch_off","ok":false,"anchor":"switchA","side":"L","label":{"en":"Switch It Off Here - It's Dead","fil":"I-off Ito Dito - Dead Na"},"feedback":{"en":"A wall switch breaks only L1. On this 230 V supply both wires are LINES: red L2 runs straight to the lamp and stays live to ground whatever the switches do - and with 3-ways, 'off' at one switch is 'on' again from another. Only the 2-pole breaker opens both lines.","fil":"L1 lang ang pinuputol ng wall switch. Sa 230 V na supply na ito, LINE ang dalawang wire: diretso sa lamp ang pulang L2 at nananatiling live sa ground anuman ang gawin ng mga switch - at sa 3-way, ang 'off' sa isang switch ay 'on' ulit mula sa isa pa. Ang 2-pole breaker lang ang nagbubukas sa dalawang line."},"fault":["tailsA","zap"]},{"id":"test_black_only","ok":false,"anchor":"tester","side":"L","label":{"en":"Test The Black Wire Only","fil":"Ang Itim na Wire Lang ang I-test"},"feedback":{"en":"Black is only L1. Red L2 is a line too, so prove BOTH dead - and prove the tester on a live outlet before and after, or a dead tester passes for a dead circuit.","fil":"L1 lang ang itim. Line din ang pulang L2, kaya patunayang dead ang DALAWA - at patunayang gumagana ang tester sa live na outlet bago at pagkatapos, o ang patay na tester ay magmumukhang patay na circuit."},"fault":["tailsLamp","zap"]}]},{"id":"identify_the_3way_terminals","instruction":{"en":"S3-A is a 3-way switch: three screws and no ON or OFF marked on it. Before any conductor goes on:","fil":"3-way switch ang S3-A: tatlong screw at walang nakamarkang ON o OFF. Bago ikabit ang kahit anong conductor:"},"plays":{"en":"COM lights up with black L1, and the two brass screws light up with the two yellow travellers.","fil":"Sabay umiilaw ang COM at ang itim na L1, at umiilaw ang dalawang brass screw kasama ang dalawang dilaw na traveller."},"options":[{"id":"find_com_dark_screw","ok":true,"anchor":"switchA","side":"L","label":{"en":"Find COM - The Dark Screw","fil":"Hanapin ang COM - Ang Madilim na Screw"}},{"id":"any_screw_alike","ok":false,"anchor":"screwdriver","side":"L","label":{"en":"Any Screw - They're All Alike","fil":"Kahit Anong Screw - Pare-pareho Lang"},"feedback":{"en":"Only COM changes over: it is joined to traveller 1 in one position and to traveller 2 in the other. With L1 on a traveller screw the lamp works from one switch in some positions and not at all in others. COM is marked, and it is the darker screw.","fil":"COM lang ang lumilipat: nakakabit ito sa traveller 1 sa isang posisyon at sa traveller 2 sa kabila. Kapag nasa traveller screw ang L1, gumagana ang lamp mula sa isang switch sa ilang posisyon at hindi talaga sa iba. May marka ang COM, at ito ang mas madilim na screw."},"fault":["switchA","fail"]},{"id":"wire_then_test_live","ok":false,"anchor":"multimeter","side":"R","label":{"en":"Wire It, Then Find Out Live","fil":"I-wire, Tapos Alamin Habang Live"},"feedback":{"en":"Finding a terminal by trial on a live circuit is how people get hurt. Identify COM dead - by its marking, or with a continuity test across the switch in both positions.","fil":"Ang paghahanap ng terminal sa pamamagitan ng subok-subok sa live na circuit ay paraan para masaktan. Tukuyin ang COM habang dead - sa marka nito, o sa continuity test sa switch sa dalawang posisyon."},"fault":["tailsA","zap"]}]},{"id":"line_to_common","instruction":{"en":"In S3-A's box: the black L1 from the breaker, and two yellow travellers.","fil":"Sa box ng S3-A: ang itim na L1 mula sa breaker, at dalawang dilaw na traveller."},"plays":{"en":"Black L1 goes under S3-A's COM screw.","fil":"Naikabit ang itim na L1 sa COM screw ng S3-A."},"options":[{"id":"black_l1_on_com","ok":true,"anchor":"tailsA","side":"L","label":{"en":"Black L1 On COM","fil":"Itim na L1 sa COM"}},{"id":"l1_on_a_traveller","ok":false,"anchor":"tailsA","side":"L","label":{"en":"L1 On A Brass Screw","fil":"L1 sa Brass Screw"},"feedback":{"en":"A brass screw is a traveller. L1 there feeds only one of the two travellers whatever S3-A does, so S3-A stops switching and the lamp follows S3-B alone - in half its positions. L1 goes on COM.","fil":"Ang brass screw ay para sa traveller. Kapag doon ang L1, isa lang sa dalawang traveller ang napapakain nito anuman ang gawin ng S3-A, kaya hindi na nagsi-switch ang S3-A at sinusunod lang ng lamp ang S3-B - sa kalahati ng mga posisyon nito. Sa COM ang L1."},"fault":["switchA","fail"]},{"id":"red_through_switch_too","ok":false,"anchor":"tailsLamp","side":"R","label":{"en":"Run Red L2 Through It Too","fil":"Idaan Din Dito ang Pulang L2"},"feedback":{"en":"A 3-way carries ONE conductor through its COM. L1 is the one switched; red L2 goes straight to the lamp's silver screw and never through a switch.","fil":"Isang conductor lang ang dinadala ng 3-way sa COM nito. L1 ang sini-switch; ang pulang L2 ay diretso sa silver screw ng lamp at hindi kailanman dumadaan sa switch."},"fault":["switchA","zap"]}]},{"id":"run_the_travellers","instruction":{"en":"L1 is on COM. Two yellow travellers run up the conduit from S3-A's brass screws to S3-B's.","fil":"Nasa COM ang L1. Dalawang dilaw na traveller ang umaakyat sa conduit mula sa brass screw ng S3-A papunta sa S3-B."},"plays":{"en":"Both yellow travellers land, brass to brass, at S3-A and S3-B.","fil":"Naikabit ang dalawang dilaw na traveller, brass sa brass, sa S3-A at S3-B."},"options":[{"id":"t1_to_t1_t2_to_t2","ok":true,"anchor":"tailsA","side":"L","label":{"en":"Both Travellers, Brass To Brass","fil":"Parehong Traveller, Brass sa Brass"}},{"id":"one_traveller_enough","ok":false,"anchor":"tape","side":"L","label":{"en":"One Is Enough - Tape The Other","fil":"Isa Lang Sapat - I-tape ang Isa"},"feedback":{"en":"With one traveller the lamp can be reached only when both switches are on that side - flip either and nothing brings it back. Two travellers are what let either switch turn the lamp on from any position.","fil":"Kapag isang traveller lang, maaabot lang ang lamp kapag nasa panig na iyon ang dalawang switch - pindutin ang alinman at wala nang makakapagbalik. Ang dalawang traveller ang nagpapahintulot sa alinmang switch na buksan ang lamp mula sa kahit anong posisyon."},"fault":["switchB","fail"]},{"id":"traveller_on_b_com","ok":false,"anchor":"tailBLeg","side":"R","label":{"en":"A Yellow On S3-B's COM","fil":"Dilaw sa COM ng S3-B"},"feedback":{"en":"S3-B's COM is for the black switch leg to the lamp. A traveller on it puts the lamp on a traveller: it lights in some positions only, and the switch leg ends up on a brass screw.","fil":"Ang COM ng S3-B ay para sa itim na switch leg papunta sa lamp. Kapag traveller ang nandoon, nasa traveller ang lamp: umiilaw lang ito sa ilang posisyon, at napupunta sa brass screw ang switch leg."},"fault":["switchB","fail"]}]},{"id":"switch_leg_and_l2_to_the_lamp","instruction":{"en":"At S3-B the black switch leg waits for COM; at the lamp, the same black and red L2. The lampholder's BRASS screw feeds the centre contact, its SILVER screw the shell.","fil":"Sa S3-B, naghihintay ng COM ang itim na switch leg; sa lamp, ang parehong itim at pulang L2. Ang BRASS screw ng lampholder ang nagpapakain sa gitnang contact, at ang SILVER screw nito sa shell."},"plays":{"en":"The switch leg lands on S3-B's COM and the lamp's brass screw. Red L2 goes on the silver screw.","fil":"Naikabit ang switch leg sa COM ng S3-B at sa brass screw ng lamp. Sa silver screw ang pulang L2."},"options":[{"id":"leg_on_com_and_brass_red_silver","ok":true,"anchor":"lamp","side":"R","label":{"en":"Black: COM And Brass. Red: Silver","fil":"Itim: COM at Brass. Pula: Silver"}},{"id":"twist_and_tape_at_lamp","ok":false,"anchor":"tape","side":"L","label":{"en":"Twist And Tape To The Lamp","fil":"Pilipitin at I-tape sa Lamp"},"feedback":{"en":"A taped twist is not a termination: it loosens as it heats and cools, arcs, and chars the holder. Each conductor goes under its own screw, tight.","fil":"Hindi termination ang pinilipit na tinapalan ng tape: lumuluwag ito sa pag-init at paglamig, nag-a-arc, at sinusunog ang holder. Bawat conductor ay sa sarili nitong screw, mahigpit."},"fault":["lamp","zap"]},{"id":"leg_on_brass_at_b","ok":false,"anchor":"switchB","side":"R","label":{"en":"Leg On A Brass Screw At S3-B","fil":"Leg sa Brass Screw sa S3-B"},"feedback":{"en":"The lamp is fed from S3-B's COM - that is the screw that changes over between the travellers. On a brass screw the leg is joined to one traveller for good, and S3-B no longer switches anything.","fil":"Pinapakain ang lamp mula sa COM ng S3-B - iyan ang screw na lumilipat sa pagitan ng mga traveller. Kapag nasa brass screw, habambuhay nang nakadugtong ang leg sa isang traveller, at wala nang sini-switch ang S3-B."},"fault":["switchB","fail"]}]},{"id":"test_all_four_positions","instruction":{"en":"Everything is landed. S3-A and S3-B are both UP, and the breaker is locked off.","fil":"Nakakabit na ang lahat. Parehong naka-UP ang S3-A at S3-B, at naka-lock off ang breaker."},"plays":{"en":"Covers on, lock off, breaker on. Current reaches the lamp and the test card fills in: on, off, on, off.","fil":"Nakakabit na ang mga cover, tanggal ang lock, naka-on ang breaker. Umaabot ang current sa lamp at napupunan ang test card: on, off, on, off."},"options":[{"id":"covers_power_try_all_four","ok":true,"anchor":"breaker","side":"R","label":{"en":"Covers On, Power On, Try All Four","fil":"Ikabit ang Cover, I-on ang Power, Subukan ang Apat"}},{"id":"flip_one_switch_once","ok":false,"anchor":"switchB","side":"R","label":{"en":"Flip One Switch - It Works","fil":"Isang Switch Lang Pinindot - Gumagana"},"feedback":{"en":"One switch working proves half the wiring. A traveller on the wrong screw still lets one switch work in some positions. Try all four combinations: the lamp has to change at every flip, from either end.","fil":"Ang isang gumaganang switch ay patunay ng kalahati lang ng wiring. Ang traveller sa maling screw ay hinahayaan pa ring gumana ang isang switch sa ilang posisyon. Subukan ang apat na kombinasyon: dapat magbago ang lamp sa bawat pindot, mula sa alinmang dulo."},"fault":["testCard","fail"]},{"id":"power_first_covers_after","ok":false,"anchor":"coverA","side":"L","label":{"en":"Power On First, Covers After","fil":"I-on Muna ang Power, Saka ang Cover"},"feedback":{"en":"Energising with the terminals open is how a finger or a screwdriver finds L1. Covers on and screwed, then power.","fil":"Ang pag-energize habang bukas ang mga terminal ay kung paano nahahawakan ng daliri o screwdriver ang L1. Ikabit at i-screw ang cover, saka mag-power."},"fault":["tailsA","zap"]}]}]};
+    const N = DATA.decisions.length, MAX = N * 10, PASS = 70, WIDE_MIN = 940;
+    const ORDER = [[1, 0, 2], [1, 2, 0], [0, 2, 1], [2, 1, 0], [1, 0, 2], [0, 2, 1]];
+    const UI = {
+      en: { count: (n, t) => `Decision ${n} of ${t}`, done: 'Booth wired', score: (a, b) => `Score ${a}/${b}`, brief: 'Brief', correct: 'Correct!', repeat: (f) => `Already tried — ${f}`, passed: 'Passed', failed: 'Not passed', firstTry: (a, b) => `${a} of ${b} decisions right first time`, clean: 'Every decision right first time.', review: 'Worth reviewing', again: 'Try again' },
+      fil: { count: (n, t) => `Desisyon ${n} sa ${t}`, done: 'Tapos na ang booth', score: (a, b) => `Score ${a}/${b}`, brief: 'Brief', correct: 'Tama!', repeat: (f) => `Nasubukan mo na — ${f}`, passed: 'Pasado', failed: 'Hindi pasado', firstTry: (a, b) => `${a} sa ${b} na desisyon ang tama sa unang subok`, clean: 'Tama lahat ng desisyon sa unang subok.', review: 'Dapat balikan', again: 'Subukan ulit' }
+    };
+    const stage = $('stage'), field = $('field'), booth = $('booth'), svg = $('svg');
+    const gPower = $('g-power'), gMarks = $('g-marks'), gFx = $('g-fx');
+    const hud = $('hud'), hudSide = $('hud-side'), hudTitle = $('hud-title'), hudCount = $('hud-count');
+    const hudInstr = $('hud-instr'), cells = $('cells'), opts = $('opts'), fb = $('fb'), scoreEl = $('score');
+    const langBtn = { en: $('lang-en'), fil: $('lang-fil') };
+    let lang = 'en';
+    try { if (localStorage.getItem('electar-demo-lang') === 'fil') lang = 'fil'; } catch (e) { /* storage blocked */ }
+    let i = 0, done = 0, busy = false, finished = false, powered = false, wide = false;
+    let box = { x: 0, y: 0, w: 1, h: 1 }, last = { kind: 'brief' };
+    const wrong = DATA.decisions.map(() => new Set());
+    const slips = [];
+    const points = (w) => Math.max(0, 10 - 5 * w);
+    const total = () => { let s = 0; for (let k = 0; k < done; k++) s += points(wrong[k].size); return s; };
+    const tidy = (s) => s.replace(/ - /g, ' – ').replace(/(^|[\s(])'/g, '$1‘').replace(/'/g, '’');
+    const tx = (o) => tidy(o[lang]);
+    const at = ([fx, fy]) => [box.x + fx * box.w, box.y + fy * box.h];
+
+    function renderHud() {
+      const u = UI[lang];
+      hudTitle.textContent = tx(DATA.title);
+      hudCount.textContent = finished ? u.done : u.count(i + 1, N);
+      hudInstr.textContent = tx(finished ? DATA.decisions[N - 1].plays : DATA.decisions[i].instruction);
+      cells.textContent = '';
+      for (let k = 0; k < N; k++) cells.append(h('span', 'cell' + (k < done ? (wrong[k].size ? ' is-mixed' : ' is-clean') : (k === i && !finished ? ' is-now' : ''))));
+      scoreEl.textContent = u.score(total(), MAX);
+    }
+    function renderOptions(enter) {
+      opts.textContent = '';
+      if (finished) return;
+      const d = DATA.decisions[i];
+      ORDER[i].forEach((oi, k) => {
+        const o = d.options[oi];
+        const b = h('button', 'opt' + (wrong[i].has(o.id) ? ' is-tried' : ''));
+        b.type = 'button'; b.dataset.oi = oi;
+        const key = h('span', 'opt__key', 'ABC'[k]); key.setAttribute('aria-hidden', 'true');
+        b.append(key, h('span', 'opt__label', tx(o.label)));
+        b.addEventListener('click', () => choose(oi));
+        opts.append(b);
+      });
+      if (enter) { opts.classList.add('is-entering'); requestAnimationFrame(() => requestAnimationFrame(() => opts.classList.remove('is-entering'))); }
+    }
+    function renderFeedback() {
+      const u = UI[lang];
+      fb.textContent = '';
+      fb.className = 'fb is-' + last.kind;
+      const body = h('div', last.kind === 'final' ? 'fb__final' : 'fb__body');
+      const chip = (t) => fb.append(h('span', 'fb__chip', t));
+      if (last.kind === 'brief') body.append(h('p', 'fb__label', u.brief), h('p', 'fb__text', tx(DATA.brief)));
+      else if (last.kind === 'wrong' || last.kind === 'repeat') {
+        const msg = tx(DATA.decisions[last.d].options[last.oi].feedback);
+        chip(last.kind === 'wrong' ? '−5' : '✗');
+        body.append(h('p', 'fb__text', last.kind === 'wrong' ? msg : u.repeat(msg)));
+      } else if (last.kind === 'right') {
+        chip('+' + last.gained);
+        body.append(h('p', 'fb__text', u.correct + ' ' + tx(DATA.decisions[last.d].plays)));
+      } else {
+        const s = total(), pct = Math.round(100 * s / MAX), clean = wrong.filter((w) => !w.size).length;
+        body.append(h('p', 'fb__big', `${s}/${MAX} · ${pct}% · ${pct >= PASS ? u.passed : u.failed}`));
+        body.append(h('p', 'fb__text', clean === N ? u.clean : u.firstTry(clean, N)));
+        if (slips.length) {
+          body.append(h('p', 'fb__label', u.review));
+          const ul = h('ul', 'fb__review');
+          for (const [d, oi] of slips) ul.append(h('li', '', '✗  ' + tx(DATA.decisions[d].options[oi].label)));
+          body.append(ul);
+        }
+        const again = h('button', 'fb__again', u.again); again.type = 'button';
+        again.addEventListener('click', reset);
+        body.append(again);
+      }
+      fb.append(body);
+    }
+    function choose(oi) {
+      if (busy || finished) return;
+      const d = DATA.decisions[i], o = d.options[oi];
+      if (o.ok) {
+        busy = true;
+        const hadFocus = opts.contains(document.activeElement);
+        done = i + 1;
+        last = { kind: 'right', d: i, gained: points(wrong[i].size) };
+        opts.classList.add('is-out'); gMarks.classList.add('is-out');
+        ring(at(AT[o.anchor]), 'ok');
+        const final = i === N - 1;
+        if (final) { powered = true; drawPower(); }
+        renderHud(); renderFeedback();
+        setTimeout(() => {
+          busy = false;
+          if (final) { finished = true; last = { kind: 'final' }; renderFeedback(); } else i++;
+          opts.classList.remove('is-out'); gMarks.classList.remove('is-out');
+          renderHud(); renderOptions(true); layout();
+          if (hadFocus) (opts.querySelector('.opt') || fb.querySelector('.fb__again'))?.focus({ preventScroll: true });
+        }, final ? 1700 : 1350);
+      } else {
+        const again = wrong[i].has(o.id);
+        if (!again) { wrong[i].add(o.id); slips.push([i, oi]); }
+        last = { kind: again ? 'repeat' : 'wrong', d: i, oi };
+        opts.querySelector(`[data-oi="${oi}"]`)?.classList.add('is-tried');
+        renderFeedback();
+        const [where, kind] = o.fault;
+        if (kind === 'zap') spark(at(AT[where])); else { ring(at(AT[where]), 'live'); setTimeout(() => ring(at(AT[where]), 'live'), 260); }
+      }
+    }
+    function reset() {
+      i = 0; done = 0; busy = false; finished = false; powered = false;
+      wrong.forEach((w) => w.clear()); slips.length = 0; last = { kind: 'brief' }; gFx.textContent = '';
+      renderHud(); renderOptions(true); renderFeedback(); layout();
+    }
+    function ring([x, y], kind) { const c = el('circle', { cx: x, cy: y, r: 10, class: 'fx-ring fx-ring--' + kind }, gFx); setTimeout(() => c.remove(), 1000); }
+    function spark([x, y]) {
+      const g = el('g', { class: 'fx-spark', transform: `translate(${x} ${y})` }, gFx);
+      const inner = el('g', { class: 'fx-spark__in' }, g);
+      for (let k = 0; k < 10; k++) {
+        const a = (k * 36 + (k % 2 ? 9 : -5)) * Math.PI / 180, r2 = k % 2 ? 17 : 23;
+        el('line', { x1: Math.cos(a) * 7, y1: Math.sin(a) * 7, x2: Math.cos(a) * r2, y2: Math.sin(a) * r2 }, inner);
+      }
+      el('circle', { r: 5 }, inner);
+      ring([x, y], 'live');
+      setTimeout(() => g.remove(), 1100);
+    }
+    function drawPower() {
+      gPower.textContent = '';
+      if (!powered) return;
+      const b = at(AT.bulb);
+      el('circle', { cx: b[0], cy: b[1], r: box.w * 0.075, fill: 'url(#lamp-glow)', class: 'fx-lamp' }, gPower);
+      for (const run of RUNS) {
+        const d = 'M' + run.map((p) => at(p).map((v) => v.toFixed(1)).join(' ')).join(' L');
+        el('path', { d, class: 'fx-flow-halo' }, gPower);
+        el('path', { d, class: 'fx-flow' }, gPower);
+      }
+    }
+    function leader(x1, y1, x2, y2) {
+      el('line', { x1, y1, x2, y2, class: 'lead-halo' }, gMarks);
+      el('line', { x1, y1, x2, y2, class: 'lead-line' }, gMarks);
+      el('circle', { cx: x2, cy: y2, r: 4.5, class: 'dot' }, gMarks);
+    }
+    function layout() {
+      wide = stage.clientWidth >= WIDE_MIN;
+      stage.classList.toggle('is-wide', wide);
+      const fr = field.getBoundingClientRect(), br = booth.getBoundingClientRect();
+      const W = fr.width, H = fr.height;
+      svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+      box = { x: br.left - fr.left, y: br.top - fr.top, w: br.width, h: br.height };
+      gMarks.textContent = '';
+      if (wide) stage.style.setProperty('--hud-w', Math.max(230, Math.min(340, box.x + box.w * 0.08 - 24)) + 'px');
+      if (!finished) placeOptions(W, H);
+      drawPower();
+    }
+    function placeOptions(W, H) {
+      const d = DATA.decisions[i];
+      const items = [...opts.children].map((b) => { const o = d.options[+b.dataset.oi]; return { b, o, a: at(AT[o.anchor]) }; });
+      if (!wide) {
+        const seen = {};
+        items.forEach((t, k) => {
+          t.b.style.left = t.b.style.top = t.b.style.maxWidth = '';
+          const n = (seen[t.o.anchor] = (seen[t.o.anchor] || 0) + 1);
+          const x = t.a[0] + (n - 1) * 24, y = t.a[1];
+          const g = el('g', { class: 'badge' }, gMarks);
+          el('circle', { cx: x, cy: y, r: 11 }, g);
+          el('text', { x, y }, g).textContent = 'ABC'[k];
+        });
+        return;
+      }
+      const leftEdge = box.x + box.w * 0.075, rightEdge = box.x + box.w * 0.8, limit = H - 16 - 150;
+      for (const side of ['L', 'R']) {
+        const col = items.filter((t) => t.o.side === side).sort((p, q) => p.a[1] - q.a[1]);
+        if (!col.length) continue;
+        const room = side === 'L' ? leftEdge - 16 : W - 16 - rightEdge;
+        const start = side === 'L' ? hud.offsetTop + hud.offsetHeight + 14 : hudSide.offsetTop + hudSide.offsetHeight + 14;
+        let y = start;
+        for (const t of col) {
+          t.b.style.maxWidth = Math.min(250, room) + 'px';
+          t.w = t.b.offsetWidth; t.h = t.b.offsetHeight;
+          t.top = Math.max(y, t.a[1] - t.h / 2);
+          y = t.top + t.h + 10;
+        }
+        const over = y - 10 - limit;
+        if (over > 0) { const shift = Math.min(over, col[0].top - start); if (shift > 0) col.forEach((t) => { t.top -= shift; }); }
+        for (const t of col) {
+          const left = side === 'L' ? leftEdge - t.w : rightEdge;
+          t.b.style.left = left + 'px'; t.b.style.top = t.top + 'px';
+          leader(side === 'L' ? left + t.w - 3 : left + 3, t.top + t.h / 2, t.a[0], t.a[1]);
+        }
+      }
+    }
+    function setLang(l) {
+      lang = l;
+      try { localStorage.setItem('electar-demo-lang', l); } catch (e) { /* storage blocked */ }
+      stage.setAttribute('lang', l);
+      langBtn.en.setAttribute('aria-pressed', String(l === 'en'));
+      langBtn.fil.setAttribute('aria-pressed', String(l === 'fil'));
+      renderHud(); renderOptions(false); renderFeedback(); layout();
+    }
+    langBtn.en.addEventListener('click', () => setLang('en'));
+    langBtn.fil.addEventListener('click', () => setLang('fil'));
+    let lastWidth = 0;
+    new ResizeObserver(() => { if (stage.clientWidth === lastWidth) return; lastWidth = stage.clientWidth; layout(); }).observe(stage);
+    setLang(lang);
+    Promise.all([booth.decode ? booth.decode().catch(() => {}) : null, document.fonts ? document.fonts.ready : null]).then(layout);
+  })();
+
+  /* ---------------- scene explorer ---------------- */
+  (() => {
+    const Q = [
+      { tab: 'Quarter 1', scenes: [
+        { img: 'scene-branch', w: 910, h: 743, title: 'Branch Circuit Extension', where: 'Q1 · quarterly problem', meta: '36 decisions · 360 pts', line: 'Aling Rosa’s stock room gets its own circuit from the house panel: EMT on the dry kitchen wall, PVC across the wet yard, 3.5 mm² THHN on a 20 A breaker.', alt: 'Kitchen wall with the panel, conduit across the yard wall to the stock room freezer, and a bench of pipe and fittings.' },
+        { img: 'sample-bending', w: 572, h: 721, title: 'Pipe Bending', where: 'Q1 L2 · AR practice and Home sample', meta: '4 decisions · practice', line: 'A 90° stub-up with a hand bender. After the bend, the mark lands on the 127 mm take-up line of the height rule.', alt: 'A hand bender on a length of conduit beside a height rule.' },
+        { img: 'scene-cutting', w: 1006, h: 430, title: 'PVC Cutting and Reaming', where: 'Q1 L3 · first half of the AR paper', meta: '7 decisions', line: 'Cut the pipe square in the guide, then ream the burr from the cut end before it goes anywhere near a fitting.', alt: 'A PVC pipe in a cutting guide on a bench, with a pipe cutter, a hacksaw frame and a reamer.' },
+        { img: 'scene-welding', w: 998, h: 389, title: 'PVC Solvent Welding', where: 'Q1 L3 · second half of the AR paper', meta: '8 decisions', line: 'Clean, prime and cement both surfaces, then seat the joint with a turn and hold it while the cement grabs.', alt: 'A PVC pipe and coupling on a bench with primer and solvent cement.' }
+      ] },
+      { tab: 'Quarter 2', scenes: [
+        { img: 'scene-laundry', w: 910, h: 634, title: 'Laundry Shop', where: 'Q2 · quarterly problem', meta: '29 decisions · 290 pts', line: 'Ground the shop, bond every washer frame, give each circuit its own labelled breaker, and put the wet wall on a GFCI.', alt: 'Laundry shop with three washers on a wet back wall, a pressing counter and a bench of devices.' },
+        { img: 'scene-protective', w: 813, h: 772, title: 'Protective Devices Board', where: 'Q2 L2 · AR paper and practice', meta: '31 decisions · 310 pts', line: 'Install and test breakers, a GFCI and the grounding. When the board is energised, the couplings light run by run to show the current.', alt: 'A plywood board with conduit runs, enclosures, a ground rod and a bench of testers.' },
+        { img: 'scene-wiring', w: 793, h: 873, title: 'Wiring Devices Room', where: 'Q2 L4 · AR paper and practice', meta: '16 decisions · 160 pts', line: 'A switch, an outlet and a light on one circuit. Prove it dead first, and the covers go on before the power does.', alt: 'A room corner with a switch, an outlet, a wall light and a small panel.' }
+      ] },
+      { tab: 'Quarter 3', scenes: [
+        { img: 'scene-bakery', w: 992, h: 575, title: 'Bakery and Boarding House', where: 'Q3 · quarterly problem', meta: '22 decisions · 220 pts', line: 'A heat detector for the oven kitchen, an alarm every boarder will notice, a call point at each exit, and a panel that keeps working in a brownout.', alt: 'Bakery ground floor with deck ovens and a fire alarm panel, and six boarding rooms in a row.' },
+        { img: 'scene-fdas', w: 780, h: 887, title: 'FDAS Installation Bay', where: 'Q3 L2 · AR paper and practice', meta: '18 decisions · 180 pts', line: 'Mount, wire and test a conventional fire detection and alarm system, zone by zone.', alt: 'A bay with a fire alarm panel, detectors on the ceiling and a bench of devices.' },
+        { img: 'sample-fdas', w: 738, h: 823, title: 'FDAS Installation', where: 'Home sample', meta: 'Free to try', line: 'Mount, wire and prove a fire alarm system, open to every student from the Home screen.', alt: 'A wall with a fire alarm panel, a bell and call points.' }
+      ] },
+      { tab: 'Quarter 4', scenes: [
+        { img: 'scene-hardware', w: 1003, h: 679, title: 'Hardware Store', where: 'Q4 · quarterly problem', meta: '25 decisions · 250 pts', line: 'Cameras placed so the light is behind them, infrared for the dark yard, and a recorder that stays cool enough to keep what it sees.', alt: 'Kuya Jun’s hardware store with the shopfront, counter, office and yard, and a bench of cameras.' },
+        { img: 'scene-cctv', w: 761, h: 874, title: 'CCTV Shop', where: 'Q4 L2 · AR paper and practice', meta: '19 decisions · 190 pts', line: 'An analog-HD system on a DVR. Channel 2 starts with a fault planted in it: its connector isn’t seated.', alt: 'A shop interior with two cameras on the back wall and a DVR on a shelf.' }
+      ] },
+      { tab: 'Samples', scenes: [
+        { img: 'booth-3way', w: 1265, h: 1473, title: '3-Way Switching', where: 'Home sample', meta: '6 decisions', line: 'One stair lamp switched from the bottom and the top, on two 230 V lines. It’s the booth at the top of this page.', alt: 'The 3-way switching booth.' },
+        { img: 'sample-4way', w: 1265, h: 1473, title: '4-Way Switching', where: 'Home sample', meta: '6 decisions', line: 'The same lamp, now also switched from the landing with a 4-way between the two 3-ways.', alt: 'The 4-way switching booth with a third switch on the landing.' }
+      ] }
+    ];
+    const tabs = $('tabs'), chips = $('chips'), img = $('viewer-img'), viewer = $('viewer');
+    let q = 0, s = 0;
+    function show() {
+      const sc = Q[q].scenes[s];
+      $('info-where').textContent = sc.where; $('info-title').textContent = sc.title;
+      $('info-meta').textContent = sc.meta; $('info-line').textContent = sc.line;
+      const src = `img/${sc.img}.webp`;
+      if (!img.src.endsWith(src)) {
+        img.classList.add('is-swapping');
+        setTimeout(() => { img.src = src; img.width = sc.w; img.height = sc.h; img.alt = sc.alt; img.decode?.().catch(() => {}).finally(() => img.classList.remove('is-swapping')); if (!img.decode) img.classList.remove('is-swapping'); }, reduced ? 0 : 200);
+      } else img.alt = sc.alt;
+      [...tabs.children].forEach((b, k) => b.setAttribute('aria-pressed', String(k === q)));
+      chips.textContent = '';
+      Q[q].scenes.forEach((x, k) => {
+        const li = h('li'), b = h('button', 'chip'); b.type = 'button';
+        b.setAttribute('aria-pressed', String(k === s));
+        const t = h('img'); t.src = `img/${x.img}.webp`; t.alt = ''; t.width = 44; t.height = 36; t.loading = 'lazy';
+        b.append(t, h('span', '', x.title));
+        b.addEventListener('click', () => { s = k; show(); });
+        li.append(b); chips.append(li);
+      });
+    }
+    Q.forEach((x, k) => {
+      const b = h('button', 'tab', x.tab); b.type = 'button';
+      b.addEventListener('click', () => { q = k; s = 0; show(); });
+      tabs.append(b);
+    });
+    viewer.addEventListener('pointermove', (e) => {
+      if (reduced) return;
+      const r = viewer.getBoundingClientRect(), dx = (e.clientX - r.left) / r.width - .5, dy = (e.clientY - r.top) / r.height - .5;
+      img.style.setProperty('--ry', (dx * 16).toFixed(2) + 'deg'); img.style.setProperty('--rx', (-dy * 9).toFixed(2) + 'deg');
+    });
+    viewer.addEventListener('pointerleave', () => { img.style.setProperty('--ry', '0deg'); img.style.setProperty('--rx', '0deg'); });
+    show();
+  })();
+
+  /* ---------------- spot the wrong fix ---------------- */
+  (() => {
+    const F = [
+      { img: 'scene-branch', w: 910, h: 743, kicker: 'Quarter 1 · Branch circuit installation', title: '“The Extension Cord Across the Yard”', place: 'Aling Rosa’s carinderia, Barangay San Isidro',
+        story: 'Her stock room, 25 metres behind the house, runs a freezer and a rice cooker on an extension cord taped together mid-yard. The kitchen breaker tripped twice last month.',
+        q: 'What should she do?', wrong: 'Fit a bigger breaker in the kitchen.', right: 'Run a dedicated branch circuit to the stock room: 3.5 mm² THHN on a 20 A breaker.', rightFirst: false,
+        why: 'The breaker protects the wire, not the appliance. A bigger one removes the only warning she had, while the cord keeps cooking.', meta: 'In AR: 36 decisions · 360 pts' },
+      { img: 'scene-laundry', w: 910, h: 634, kicker: 'Quarter 2 · Protective and wiring devices', title: '“The Washing Machine That Bites”', place: 'Ate Lorna’s laundry shop, Barangay Poblacion',
+        story: 'Customers feel a tingle touching the washers with wet hands. There’s no ground wire in the shop, and the breaker has never tripped.',
+        q: 'What fixes the tingle?', wrong: 'Lay rubber mats in front of the machines.', right: 'Ground the shop, bond every washer frame, and put the wet wall on a GFCI.', rightFirst: true,
+        why: 'A mat protects whoever stands on it, while it stays dry. Leakage needs a path that isn’t a person, and a GFCI opens on the few milliamps a breaker ignores.', meta: 'In AR: 29 decisions · 290 pts' },
+      { img: 'scene-bakery', w: 992, h: 575, kicker: 'Quarter 3 · Fire detection and alarm system', title: '“The Alarm That Rings Every Morning”', place: 'Mang Tonyo’s bakery, Barangay Santa Cruz',
+        story: 'The alarm sounds at four every morning when the oven doors open. Six students board upstairs, one of them hard of hearing.',
+        q: 'What about the kitchen detector?', wrong: 'Take it down for good. It only gives false alarms.', right: 'Swap the smoke detector for a heat detector.', rightFirst: false,
+        why: 'The detector isn’t faulty, it’s the wrong type. A heat detector ignores oven smoke and steam, and the room most likely to catch fire keeps its detection.', meta: 'In AR: 22 decisions · 220 pts' },
+      { img: 'scene-hardware', w: 1003, h: 679, kicker: 'Quarter 4 · Closed-circuit television', title: '“The Camera That Saw Nothing”', place: 'Kuya Jun’s hardware store, Barangay Mabini',
+        story: 'Cement went missing from the dark yard overnight. The yard camera has no infrared, and the counter camera faces the afternoon sun.',
+        q: 'What gets usable footage?', wrong: 'Buy higher-resolution cameras.', right: 'Put the counter camera above the door looking in, and an infrared camera on the yard.', rightFirst: true,
+        why: 'The picture was never short of pixels. A sharper camera in the same place records a sharper silhouette, and its bigger files fill the disk faster.', meta: 'In AR: 25 decisions · 250 pts' }
+    ];
+    const list = $('fix-list'), scoreEl = $('fix-score');
+    const results = new Array(F.length).fill(null);
+    function score() {
+      const n = results.filter((r) => r !== null).length, ok = results.filter((r) => r === true).length;
+      scoreEl.textContent = n === F.length ? `${ok} of 4 right first time. ${ok === 4 ? 'You’d have caught every wrong fix.' : 'Each of these is a full AR paper in the app.'}` : `${n} of 4 answered`;
+    }
+    F.forEach((f, k) => {
+      const card = h('article', 'fix rv');
+      const inner = h('div', 'fix__inner');
+      const fig = () => { const fg = h('figure', 'face__fig'); const im = h('img'); im.src = `img/${f.img}.webp`; im.width = f.w; im.height = f.h; im.alt = ''; im.loading = 'lazy'; fg.append(im); return fg; };
+      const front = h('div', 'face face--front'), fb = h('div', 'face__body');
+      fb.append(h('p', 'face__kicker', f.kicker), h('h3', '', f.title), h('p', 'face__place', f.place), h('p', 'face__story', f.story), h('p', 'face__q', f.q));
+      const ans = h('div', 'answers');
+      const pick = (isRight) => {
+        if (results[k] === null) results[k] = isRight;
+        verdict.textContent = isRight ? '✓ Right call' : '✗ That’s the wrong fix';
+        verdict.className = 'verdict ' + (isRight ? 'is-ok' : 'is-bad');
+        picked.textContent = isRight ? f.right : f.wrong;
+        picked.className = 'picked' + (isRight ? '' : ' is-bad');
+        rightLine.hidden = isRight;
+        card.classList.add('is-flipped');
+        front.inert = true; back.inert = false; front.setAttribute('aria-hidden', 'true'); back.removeAttribute('aria-hidden');
+        back.querySelector('button').focus({ preventScroll: true });
+        score();
+      };
+      const opts = [[f.wrong, false], [f.right, true]];
+      if (f.rightFirst) opts.reverse();
+      for (const [text, isRight] of opts) { const b = h('button', 'answer', text); b.type = 'button'; b.addEventListener('click', () => pick(isRight)); ans.append(b); }
+      fb.append(ans); front.append(fig(), fb);
+      const back = h('div', 'face face--back'), bb = h('div', 'face__body');
+      const verdict = h('p', 'verdict'), picked = h('p', 'picked');
+      const rightLine = h('p', '', ''); rightLine.append(h('span', 'face__label', 'The right job: '), document.createTextNode(f.right));
+      const flipBack = h('button', 'btn btn--line face__back-btn', 'Turn the card back'); flipBack.type = 'button';
+      flipBack.addEventListener('click', () => { card.classList.remove('is-flipped'); back.inert = true; front.inert = false; back.setAttribute('aria-hidden', 'true'); front.removeAttribute('aria-hidden'); front.querySelector('.answer').focus({ preventScroll: true }); });
+      bb.append(h('p', 'face__kicker', f.kicker), h('h3', '', f.title), verdict, picked, rightLine, h('p', 'face__label', 'Why'), h('p', 'face__story', f.why), h('p', 'face__meta', f.meta), flipBack);
+      back.append(fig(), bb);
+      back.inert = true; back.setAttribute('aria-hidden', 'true');
+      inner.append(front, back); card.append(inner); list.append(card);
+    });
+    score();
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } }), { threshold: .15 });
+      list.querySelectorAll('.rv').forEach((n) => io.observe(n));
+    }
+  })();
+
+  /* ---------------- marker distance ---------------- */
+  (() => {
+    // 36 mm code; the test phone's camera sees about 54° across, so the view is 1.019 × distance wide.
+    const SYMBOL_CM = 3.6, VIEW_PER_CM = 2 * Math.tan(27 * Math.PI / 180), NEED = 0.35, SYMBOL_OF_CARD = 0.69;
+    const range = $('dist'), read = $('dist-read'), meter = $('meter'), fill = $('meter-fill');
+    const phone = $('phone'), screen = $('phone-screen'), card = $('phone-card'), scene = $('phone-scene'), status = $('phone-status');
+    let timers = [];
+    function update() {
+      timers.forEach(clearTimeout); timers = [];
+      const d = +range.value, frac = Math.min(1, SYMBOL_CM / (VIEW_PER_CM * d)), W = screen.clientWidth;
+      const symbolPx = frac * W, cardPx = symbolPx / SYMBOL_OF_CARD;
+      card.style.width = cardPx + 'px';
+      const ok = frac >= NEED;
+      meter.classList.toggle('is-ok', ok);
+      fill.style.width = (frac * 100).toFixed(1) + '%';
+      read.innerHTML = '';
+      read.append(h('b', '', d.toFixed(1) + ' cm'), document.createTextNode(' from the card. The code fills '), h('b', '', Math.round(frac * 100) + '%'), document.createTextNode(ok ? ' of the view, enough to place.' : ` of the view; it needs ${NEED * 100}%.`));
+      range.setAttribute('aria-valuetext', `${d.toFixed(1)} centimetres, code fills ${Math.round(frac * 100)} percent`);
+      // the scene is sized from the marker: about twice the code's width, standing on it
+      scene.style.width = (2 * symbolPx) + 'px';
+      scene.style.bottom = (screen.clientHeight / 2 - symbolPx * 0.35) + 'px';
+      phone.classList.remove('is-placed'); status.classList.remove('is-ok');
+      if (!ok) { status.textContent = 'Move closer'; return; }
+      status.textContent = 'Hold steady';
+      timers.push(setTimeout(() => { status.textContent = 'Placing…'; }, 650));
+      timers.push(setTimeout(() => { status.textContent = 'Placed on the marker'; status.classList.add('is-ok'); phone.classList.add('is-placed'); }, 1150));
+    }
+    range.addEventListener('input', update);
+    addEventListener('resize', update);
+    update();
+  })();
+
+  /* ---------------- heights wall ---------------- */
+  (() => {
+    const svg = $('wall-svg'), wall = $('wall'), list = $('dev-list'), msg = $('wall-msg');
+    const FLOOR = 440, PX = 200, y = (m) => FLOOR - m * PX, m = (py) => (FLOOR - py) / PX;
+    // DPWH standard plan for DepEd schools, heights to the device centre
+    const D = [
+      { name: 'Light switch', target: 1.20, start: .70, x: 120, w: 26, h: 40, fill: '#f4f2ee', kind: 'switch' },
+      { name: 'Convenience outlet', target: .30, start: .95, x: 195, w: 26, h: 40, fill: '#f4f2ee', kind: 'outlet' },
+      { name: 'Panelboard', target: 1.50, start: 1.05, x: 275, w: 62, h: 82, fill: '#c9ced6', kind: 'panel' },
+      { name: 'Fire alarm station', target: 1.50, start: .55, x: 355, w: 34, h: 34, fill: '#d63a3a', kind: 'fas' }
+    ];
+    el('rect', { x: 70, y: 40, width: 322, height: 400, rx: 4, class: 'w-bg' }, svg);
+    el('rect', { x: 60, y: FLOOR, width: 340, height: 16, class: 'w-floor' }, svg);
+    for (let k = 0; k <= 20; k++) {
+      const yy = y(k / 10);
+      el('line', { x1: k % 5 ? 56 : 46, y1: yy, x2: 66, y2: yy, class: 'w-tick' }, svg);
+      if (k % 5 === 0) el('text', { x: 40, y: yy + 4, 'text-anchor': 'end', class: 'w-label' }, svg).textContent = (k / 10).toFixed(1) + ' m';
+    }
+    const rows = [], groups = [];
+    D.forEach((d) => {
+      el('line', { x1: d.x - d.w / 2 - 12, y1: y(d.target), x2: d.x + d.w / 2 + 12, y2: y(d.target), class: 'w-target' }, svg);
+      const g = el('g', { class: 'dev', tabindex: 0, role: 'slider', 'aria-label': d.name, 'aria-valuemin': 0.2, 'aria-valuemax': 1.85 }, svg);
+      el('rect', { class: 'd-ring', x: -d.w / 2 - 6, y: -d.h / 2 - 6, width: d.w + 12, height: d.h + 12, rx: 8 }, g);
+      el('rect', { class: 'd-body', x: -d.w / 2, y: -d.h / 2, width: d.w, height: d.h, rx: d.kind === 'panel' ? 3 : 4, fill: d.fill }, g);
+      if (d.kind === 'switch') el('rect', { x: -4, y: -9, width: 8, height: 18, rx: 2, fill: '#1d283e' }, g);
+      if (d.kind === 'outlet') { el('rect', { x: -6, y: -10, width: 3, height: 7, fill: '#1d283e' }, g); el('rect', { x: 3, y: -10, width: 3, height: 7, fill: '#1d283e' }, g); el('rect', { x: -6, y: 4, width: 3, height: 7, fill: '#1d283e' }, g); el('rect', { x: 3, y: 4, width: 3, height: 7, fill: '#1d283e' }, g); }
+      if (d.kind === 'panel') { el('rect', { x: -22, y: -28, width: 44, height: 40, rx: 2, fill: '#e9ecf0', stroke: '#1d283e', 'stroke-width': 1 }, g); for (let r = 0; r < 4; r++) el('rect', { x: -16, y: -24 + r * 9, width: 32, height: 5, fill: '#1d283e' }, g); }
+      if (d.kind === 'fas') el('rect', { x: -8, y: -8, width: 16, height: 16, rx: 2, fill: '#fff' }, g);
+      const tag = el('text', { class: 'd-tag', x: 0, y: d.h / 2 + 18, 'text-anchor': 'middle' }, g);
+      const li = h('li'), name = h('b', '', d.name), hv = h('span', 'h', '');
+      li.append(name, hv); list.append(li);
+      d.g = g; d.tag = tag; d.li = li; d.hv = hv;
+      groups.push(d); rows.push(li);
+    });
+    function set(d, val) {
+      d.h0 = Math.max(.2, Math.min(1.85, val));
+      d.ok = Math.abs(d.h0 - d.target) < .04;
+      if (d.ok) d.h0 = d.target;
+      d.g.setAttribute('transform', `translate(${d.x} ${y(d.h0)})`);
+      d.g.classList.toggle('is-set', d.ok);
+      d.tag.textContent = d.h0.toFixed(2) + ' m' + (d.ok ? ' ✓' : '');
+      d.g.setAttribute('aria-valuenow', d.h0.toFixed(2));
+      d.g.setAttribute('aria-valuetext', `${d.h0.toFixed(2)} metres${d.ok ? ', correct height' : ''}`);
+      d.li.classList.toggle('is-set', d.ok);
+      d.hv.textContent = d.ok ? d.target.toFixed(2) + ' m ✓' : '?';
+      const n = groups.filter((x) => x.ok).length;
+      msg.textContent = n === groups.length ? 'All four at DPWH heights. That’s the wall every ElectAR room is built on.' : (n ? `${n} of 4 at the right height.` : '');
+    }
+    let drag = null;
+    const toSvgY = (e) => { const p = svg.createSVGPoint(); p.x = e.clientX; p.y = e.clientY; return p.matrixTransform(svg.getScreenCTM().inverse()).y; };
+    groups.forEach((d) => {
+      d.g.addEventListener('pointerdown', (e) => { drag = { d, off: toSvgY(e) - y(d.h0) }; d.g.setPointerCapture(e.pointerId); e.preventDefault(); d.g.focus({ preventScroll: true }); });
+      d.g.addEventListener('pointermove', (e) => { if (drag && drag.d === d) set(d, m(toSvgY(e) - drag.off)); });
+      d.g.addEventListener('pointerup', () => { drag = null; });
+      d.g.addEventListener('keydown', (e) => {
+        const step = e.shiftKey ? .01 : .05;
+        if (e.key === 'ArrowUp' || e.key === 'ArrowRight') { set(d, d.h0 + step); e.preventDefault(); }
+        if (e.key === 'ArrowDown' || e.key === 'ArrowLeft') { set(d, d.h0 - step); e.preventDefault(); }
+      });
+    });
+    const reset = () => groups.forEach((d) => set(d, d.start));
+    $('wall-reset').addEventListener('click', reset);
+    $('hint-btn').addEventListener('click', (e) => { const on = !wall.classList.contains('show-hints'); wall.classList.toggle('show-hints', on); e.currentTarget.setAttribute('aria-pressed', String(on)); e.currentTarget.textContent = on ? 'Hide target lines' : 'Show target lines'; });
+    reset();
+  })();
+
+  /* ---------------- conductor colours ---------------- */
+  (() => {
+    const W = [
+      { sw: 'l1', name: 'Black', role: 'L1', text: 'One of the two lines on a 230 V Philippine supply. A wall switch breaks this one.' },
+      { sw: 'l2', name: 'Red', role: 'L2', text: 'Also a line, live to ground. No wall switch ever breaks it, so an OFF switch doesn’t make a lamp safe. Only the 2-pole breaker opens both.' },
+      { sw: 'g', name: 'Green, yellow stripe', role: 'Ground', text: 'Equipment grounding. It bonds metal frames, so leakage has a path that isn’t a person.' },
+      { sw: 't', name: 'Yellow', role: 'Travellers', text: 'Between 3-way switches. PEC 2017 fixes no colour for them; ElectAR uses yellow so a traveller can’t pass for a line or a neutral.' },
+      { sw: 'n', name: 'White or grey', role: 'Neutral', text: 'The grounded conductor, where a supply has one. Provincial co-ops may supply line-to-neutral; a lesson says which it shows.' }
+    ];
+    const btns = $('wire-btns'), out = $('wire-detail');
+    function show(k) {
+      [...btns.children].forEach((b, j) => b.setAttribute('aria-pressed', String(j === k)));
+      out.textContent = ''; out.append(h('b', '', `${W[k].name} · ${W[k].role}. `), document.createTextNode(W[k].text));
+    }
+    W.forEach((w, k) => {
+      const b = h('button', 'wbtn'); b.type = 'button';
+      const s = h('span', 'sw sw--' + w.sw); s.setAttribute('aria-hidden', 'true');
+      b.append(s, document.createTextNode(`${w.name} · ${w.role}`));
+      b.addEventListener('click', () => show(k));
+      btns.append(b);
+    });
+    show(1);
+  })();
+
+  /* ---------------- classroom toggle ---------------- */
+  (() => {
+    const sb = $('seg-student'), tb = $('seg-teacher'), sl = $('feat-student'), tl = $('feat-teacher');
+    const pick = (teacher) => { sl.hidden = teacher; tl.hidden = !teacher; sb.setAttribute('aria-pressed', String(!teacher)); tb.setAttribute('aria-pressed', String(teacher)); };
+    sb.addEventListener('click', () => pick(false));
+    tb.addEventListener('click', () => pick(true));
+  })();
+})();
+</script>
+</body>
+</html>
