@@ -114,7 +114,14 @@ section[id]{scroll-margin-top:64px}
 .nav__links{display:flex;gap:2px}
 .nav__links a{color:rgba(231,235,243,.8);text-decoration:none;font:500 .875rem/1 var(--f-body);padding:10px 12px;border-radius:8px}
 .nav__links a:hover,.nav__links a.is-here{color:#fff;background:rgba(255,255,255,.08)}
-.nav__cta{padding:10px 16px;font-size:.84rem;margin-left:auto}
+.ncta{margin-left:auto;flex:none;display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:999px;text-decoration:none;font:600 .86rem/1 var(--f-body);color:var(--navy);background:var(--gold-hi);transition:background-color .3s,box-shadow .4s var(--ease)}
+.ncta:hover{background:#e2b35c;box-shadow:0 8px 22px rgba(212,165,55,.35)}
+.ncta:focus-visible{outline:3px solid var(--current);outline-offset:3px}
+.ncta svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ncta__go{transition:transform .3s var(--ease)}
+.ncta:hover .ncta__go{transform:translateX(3px)}
+.ncta__short{display:none}
+@media (max-width:440px){.ncta__long{display:none}.ncta__short{display:inline}}
 .cta{position:relative;overflow:hidden;display:grid;gap:28px;align-items:center;background:var(--band);color:var(--band-ink);border-radius:22px;padding:clamp(28px,5vw,56px);box-shadow:var(--shadow)}
 .cta::before{content:"";position:absolute;right:-120px;top:-120px;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(212,165,55,.28),transparent 70%);pointer-events:none}
 @media (min-width:900px){.cta{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr)}}
@@ -564,7 +571,11 @@ section[id]{scroll-margin-top:64px}
     <nav class="nav__links" aria-label="Page sections">
       <a href="#play">Play</a><a href="#curriculum">Curriculum</a><a href="#scenes">Scenes</a><a href="#fixes">Problems</a><a href="#marker">Phones</a><a href="#practice">Practice</a><a href="#classroom">Classroom</a>
     </nav>
-    <a class="btn btn--gold nav__cta" href="schools.html">Get it for your school →</a>
+    <a class="ncta" href="schools.html">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10l9-6 9 6M5 9.5V20h14V9.5M9 20v-5h6v5M3 20h18"/></svg>
+      <span class="ncta__long">Get ElectAR for your school</span><span class="ncta__short">For schools</span>
+      <span class="ncta__go" aria-hidden="true">→</span>
+    </a>
   </div>
   <div class="nav__gauge" id="gauge" aria-hidden="true"></div>
 </header>
