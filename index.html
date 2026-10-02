@@ -62,6 +62,13 @@
 }
 
 *,*::before,*::after{box-sizing:border-box}
+/* a box sized for every text it can show: invisible copies share the live text's grid cell */
+.hold{display:grid}
+.hold>*{grid-area:1/1;min-width:0}
+.hold__ghost{visibility:hidden}
+.info__meta.hold{display:inline-grid}
+.btn.hold{display:inline-grid}
+.btn.hold,.opt__label.hold,.chip .hold{align-items:center}
 [hidden]{display:none!important}
 html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
 body{margin:0;background:var(--page);color:var(--ink);font:400 1rem/1.6 var(--f-body);-webkit-font-smoothing:antialiased}
@@ -107,6 +114,33 @@ section[id]{scroll-margin-top:64px}
 .nav__links{display:flex;gap:2px}
 .nav__links a{color:rgba(231,235,243,.8);text-decoration:none;font:500 .875rem/1 var(--f-body);padding:10px 12px;border-radius:8px}
 .nav__links a:hover,.nav__links a.is-here{color:#fff;background:rgba(255,255,255,.08)}
+.nav__cta{padding:10px 16px;font-size:.84rem;margin-left:auto}
+.cta{position:relative;overflow:hidden;display:grid;gap:28px;align-items:center;background:var(--band);color:var(--band-ink);border-radius:22px;padding:clamp(28px,5vw,56px);box-shadow:var(--shadow)}
+.cta::before{content:"";position:absolute;right:-120px;top:-120px;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(212,165,55,.28),transparent 70%);pointer-events:none}
+@media (min-width:900px){.cta{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr)}}
+.cta h2{font-size:clamp(1.9rem,1.15rem + 2.4vw,3rem);line-height:1.06;margin-top:12px}
+.cta .lead{color:var(--band-ink-2);margin-top:14px}
+.cta__proof{list-style:none;margin:22px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+.cta__proof li{font:600 .78rem/1 var(--f-mono);color:var(--band-ink);background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:9px 12px}
+.cta__proof b{color:var(--band-gold)}
+.cta__act{position:relative;display:grid;gap:22px;color:var(--band-ink)}
+.sbtn{position:relative;isolation:isolate;display:flex;align-items:center;gap:16px;width:100%;max-width:440px;padding:16px 18px;border-radius:18px;text-decoration:none;color:#141c2e;background:linear-gradient(135deg,#f0cb6a,#d4a537 55%,#b8862a);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 16px 40px rgba(212,165,55,.35);transition:transform .5s cubic-bezier(.16,1,.3,1),box-shadow .5s cubic-bezier(.16,1,.3,1)}
+.sbtn::before{content:"";position:absolute;inset:-6px;z-index:-1;border-radius:24px;border:2px solid rgba(212,165,55,.6);animation:sbtn-ring 2.4s ease-out infinite}
+@keyframes sbtn-ring{from{opacity:.9;transform:scale(.97)}to{opacity:0;transform:scale(1.08)}}
+.sbtn:hover{transform:translateY(-3px);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 22px 50px rgba(212,165,55,.5)}
+.sbtn:active{transform:translateY(0) scale(.98);transition-duration:.12s}
+.sbtn:focus-visible{outline:3px solid #7fe3ff;outline-offset:4px}
+.sbtn__ico{flex:none;display:grid;place-items:center;width:48px;height:48px;border-radius:14px;background:#141c2e}
+.sbtn__ico svg{width:26px;height:26px;fill:none;stroke:#d4a537;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.sbtn__txt{flex:1;display:grid;gap:3px;text-align:left;line-height:1.15}
+.sbtn__txt small{font:600 .72rem/1.2 "JetBrains Mono",monospace;letter-spacing:.06em;text-transform:uppercase;opacity:.75}
+.sbtn__txt b{font:700 1.2rem/1.15 "Chakra Petch","Bahnschrift",sans-serif}
+.sbtn__go{flex:none;display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:rgba(20,28,46,.12);font-size:1.2rem;transition:transform .4s cubic-bezier(.16,1,.3,1),background-color .3s}
+.sbtn:hover .sbtn__go{transform:translateX(4px);background:#141c2e;color:#d4a537}
+.ticks{list-style:none;margin:0;padding:0;display:grid;gap:8px;font-size:.9rem}
+.ticks li{display:flex;gap:10px;align-items:baseline}
+.ticks li::before{content:"✓";font-weight:700;color:#4ade80}
+@media (prefers-reduced-motion:reduce){.sbtn::before{animation:none;opacity:0}}
 .nav__gauge{position:absolute;left:0;bottom:-1px;height:2px;width:100%;transform-origin:0 50%;transform:scaleX(var(--p,0));background:linear-gradient(90deg,var(--gold-hi),var(--current))}
 @media (max-width:900px){.nav__links{display:none}}
 
@@ -142,7 +176,7 @@ section[id]{scroll-margin-top:64px}
 @media (min-width:560px){.hero__facts{grid-template-columns:repeat(4,auto)}}
 .hero__facts li{display:grid;gap:4px}
 .hero__facts strong{font:600 1.85rem/1 var(--f-display);color:#fff;font-variant-numeric:tabular-nums;white-space:nowrap}
-.hero__facts span{font:500 .68rem/1.3 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--band-ink-2)}
+.hero__facts li>span{font:500 .68rem/1.3 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--band-ink-2)}
 
 .bench{display:grid;gap:12px}
 .view{position:relative;overflow:hidden;border-radius:18px;aspect-ratio:1265/1473;max-width:470px;width:100%;margin-inline:auto;
@@ -170,7 +204,7 @@ section[id]{scroll-margin-top:64px}
 .hs--d:active{transform:translate(-50%,18px) scale(.97)}
 .hs--l:active{transform:translate(calc(-100% - 16px),-50%) scale(.97)}
 .hs--r:active{transform:translate(16px,-50%) scale(.97)}
-.hs__state{font:700 .66rem/1 var(--f-mono);letter-spacing:.06em;padding:4px 6px;border-radius:5px;background:#3a455c;color:#fff}
+.hs__state{font:700 .66rem/1 var(--f-mono);letter-spacing:.06em;padding:4px 6px;min-width:calc(4ch + .24em + 12px);text-align:center;border-radius:5px;background:#3a455c;color:#fff}
 .hs[data-on="true"] .hs__state{background:var(--gold-hi);color:var(--navy)}
 .rocker{position:relative;width:14px;height:22px;border-radius:4px;background:#f2efe9;box-shadow:inset 0 0 0 1.5px #9aa3b3}
 .rocker::after{content:"";position:absolute;left:3px;right:3px;height:8px;border-radius:2px;background:#1d283e;top:3px;transition:top .18s}
@@ -210,7 +244,7 @@ section[id]{scroll-margin-top:64px}
 .lang{display:inline-flex;padding:3px;border-radius:999px;background:#172036}
 .lang button{font:600 .72rem/1 var(--f-mono);letter-spacing:.06em;color:rgba(255,255,255,.72);background:none;border:0;border-radius:999px;padding:8px 12px;cursor:pointer}
 .lang button[aria-pressed="true"]{background:#fff;color:var(--navy)}
-.score{font:600 .8rem/1 var(--f-mono);font-variant-numeric:tabular-nums;color:#fff;background:#172036;padding:10px 13px;border-radius:999px}
+.score{text-align:center;font:600 .8rem/1 var(--f-mono);font-variant-numeric:tabular-nums;color:#fff;background:#172036;padding:10px 13px;border-radius:999px}
 .opts{order:4;display:grid;gap:8px}
 .opt{display:flex;align-items:center;gap:10px;text-align:left;font:600 .875rem/1.3 var(--f-body);color:#fff;background:var(--navy);border:1.5px solid rgba(255,255,255,.88);border-radius:18px;padding:9px 16px;cursor:pointer;box-shadow:0 4px 14px rgba(8,14,28,.28);transition:opacity .24s ease,background-color .15s,border-color .15s}
 .opt:hover{background:var(--navy-hi);border-color:var(--gold-hi)}
@@ -219,7 +253,8 @@ section[id]{scroll-margin-top:64px}
 .opt.is-tried .opt__label{text-decoration:line-through;text-decoration-thickness:1.5px;text-decoration-color:rgba(255,255,255,.75)}
 .opts.is-entering .opt{opacity:0}
 .opts.is-out .opt{opacity:0;pointer-events:none;transition:opacity .18s ease}
-.fb{order:5;display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-radius:12px;background:#172036;min-height:50px}
+.fb{order:5;display:grid;padding:12px 14px;border-radius:12px;background:#172036;min-height:50px}
+.fb__row{display:flex;gap:12px;align-items:flex-start;min-width:0}
 .fb__chip{flex:none;font:700 .8rem/1 var(--f-mono);font-variant-numeric:tabular-nums;padding:6px 9px;border-radius:8px;background:#e5484d;color:#fff}
 .fb.is-right .fb__chip{background:#1f9d55}
 .fb.is-repeat .fb__chip{background:#4c5569}
@@ -241,6 +276,7 @@ section[id]{scroll-margin-top:64px}
 .stage.is-wide .opts{position:absolute;inset:0;display:block;pointer-events:none}
 .stage.is-wide .opt{position:absolute;pointer-events:auto;width:max-content;font-size:.8125rem;padding:8px 14px}
 .stage.is-wide .opt__key{display:none}
+.stage.is-wide .opt .hold__ghost{display:none}
 .stage.is-wide .fb{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);width:min(760px,calc(100% - 32px));background:rgba(15,21,35,.88);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
 .stage__svg .lead-halo{fill:none;stroke:#fff;stroke-width:4.5;stroke-linecap:round;opacity:.95}
 .stage__svg .lead-line{fill:none;stroke:#1d283e;stroke-width:1.75;stroke-linecap:round}
@@ -269,9 +305,9 @@ section[id]{scroll-margin-top:64px}
 .tab[aria-pressed="true"]{background:var(--fill);border-color:var(--fill);color:#fff}
 .explorer{display:grid;gap:24px;grid-template-columns:minmax(0,1fr);align-items:stretch}
 @media (min-width:960px){.explorer{grid-template-columns:minmax(0,1.5fr) minmax(0,1fr)}}
-.viewer{position:relative;border-radius:18px;overflow:hidden;min-height:clamp(280px,40vw,460px);background:radial-gradient(80% 70% at 50% 64%,var(--surface-2),var(--surface) 72%);border:1px solid var(--line);box-shadow:var(--shadow);perspective:1100px;display:grid;place-items:center;padding:clamp(18px,3vw,36px)}
+.viewer{--vh:clamp(280px,40vw,460px);--vp:clamp(18px,3vw,36px);position:relative;border-radius:18px;overflow:hidden;min-height:var(--vh);background:radial-gradient(80% 70% at 50% 64%,var(--surface-2),var(--surface) 72%);border:1px solid var(--line);box-shadow:var(--shadow);perspective:1100px;display:grid;place-items:center;padding:var(--vp)}
 .viewer::before{content:"";position:absolute;left:12%;right:12%;bottom:9%;height:14%;border-radius:50%;background:radial-gradient(closest-side,rgba(20,28,46,.22),transparent);pointer-events:none}
-.viewer__img{position:relative;max-width:100%;max-height:clamp(240px,34vw,400px);width:auto;height:auto;object-fit:contain;transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .25s ease-out,opacity .28s,filter .28s;will-change:transform}
+.viewer__img{position:relative;max-width:100%;max-height:min(clamp(240px,34vw,400px),calc(var(--vh) - 2 * var(--vp) - 2px));width:auto;height:auto;object-fit:contain;transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .25s ease-out,opacity .28s,filter .28s;will-change:transform}
 .viewer__img.is-swapping{opacity:0;filter:blur(6px)}
 .viewer__hint{position:absolute;left:16px;bottom:14px;font:500 .72rem/1 var(--f-mono);color:var(--ink-3)}
 .info{display:flex;flex-direction:column;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:24px;box-shadow:var(--shadow)}
@@ -364,6 +400,8 @@ section[id]{scroll-margin-top:64px}
 .d-ring{fill:none;stroke:transparent}
 .dev.is-set .d-ring{stroke:var(--ok);stroke-width:2.5}
 .d-tag{font:600 12px "JetBrains Mono",monospace;fill:var(--ink)}
+.d-tag__ok{opacity:0}
+.dev.is-set .d-tag__ok{opacity:1}
 .dev.is-set .d-tag{fill:var(--ok)}
 .wires{margin-top:56px}
 .wires h3{font-size:1.25rem;font-weight:700;margin-bottom:14px}
@@ -403,7 +441,7 @@ section[id]{scroll-margin-top:64px}
 @media (min-width:760px){.nums{grid-template-columns:repeat(3,minmax(0,1fr))}}
 .nums li{display:grid;gap:10px;align-content:start;padding-top:18px;border-top:1px solid rgba(255,255,255,.16)}
 .nums strong{font:700 clamp(2.4rem,1.6rem + 2.4vw,3.4rem)/1 var(--f-display);color:var(--band-gold);font-variant-numeric:tabular-nums}
-.nums span{color:var(--band-ink-2);max-width:32ch}
+.nums li>span{color:var(--band-ink-2);max-width:32ch}
 .stack{margin-top:44px;font:500 .8rem/1.9 var(--f-mono);color:var(--band-ink-2);max-width:90ch}
 .foot{background:var(--band-2);color:var(--band-ink-2);padding-block:32px}
 .foot__in{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px 28px}
@@ -526,6 +564,7 @@ section[id]{scroll-margin-top:64px}
     <nav class="nav__links" aria-label="Page sections">
       <a href="#play">Play</a><a href="#curriculum">Curriculum</a><a href="#scenes">Scenes</a><a href="#fixes">Problems</a><a href="#marker">Phones</a><a href="#practice">Practice</a><a href="#classroom">Classroom</a>
     </nav>
+    <a class="btn btn--gold nav__cta" href="schools.html">Get it for your school →</a>
   </div>
   <div class="nav__gauge" id="gauge" aria-hidden="true"></div>
 </header>
@@ -860,6 +899,36 @@ section[id]{scroll-margin-top:64px}
     <p class="stack">Kotlin · SceneView and Filament · ARCore · ML Kit and CameraX · Firebase Auth, Firestore and Cloud Messaging · Supabase · React and Vite · Express and LibreOffice · Blender</p>
   </div>
 </section>
+
+<section class="sec" id="schools" aria-labelledby="sch-h">
+  <div class="wrap">
+    <div class="cta rv">
+      <div style="position:relative">
+        <p class="eyebrow eyebrow--band">For schools</p>
+        <h2 id="sch-h">Give every student a wiring bench in their pocket</h2>
+        <p class="lead">No shop space, not enough materials, too many students per kit? With ElectAR each student practises the real procedure, makes the decisions, and gets scored, while you track the whole class from the web.</p>
+        <ul class="cta__proof">
+          <li><b>18</b> AR scenes</li>
+          <li><b>211</b> graded decisions</li>
+          <li><b>4</b> quarters of EIM</li>
+          <li>Built to <b>PEC</b> practice</li>
+        </ul>
+      </div>
+      <div class="cta__act">
+        <a class="sbtn" href="schools.html">
+          <span class="sbtn__ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 10l9-6 9 6M5 9.5V20h14V9.5M9 20v-5h6v5M3 20h18"/><circle cx="12" cy="11" r="1.6"/></svg></span>
+          <span class="sbtn__txt"><small>For teachers &amp; school heads</small><b>Bring ElectAR to my school</b></span>
+          <span class="sbtn__go" aria-hidden="true">→</span>
+        </a>
+        <ul class="ticks">
+          <li>We set up your school account for you</li>
+          <li>Teacher web desk for classes, quizzes and scores</li>
+          <li>Runs on phones without ARCore, using a printed card</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
 </main>
 
 <footer class="foot">
@@ -881,6 +950,12 @@ section[id]{scroll-margin-top:64px}
     for (const k in attrs) e.setAttribute(k, attrs[k]);
     if (parent) parent.append(e);
     return e;
+  }
+  // Sizes `el` for the longest of `variants` (strings or nodes), so swapping its text never moves the layout.
+  function hold(el, variants) {
+    el.classList.add('hold'); el.textContent = '';
+    for (const v of variants) { const g = h('span', 'hold__ghost'); g.setAttribute('aria-hidden', 'true'); g.append(v); el.append(g); }
+    return el.appendChild(h('span', 'hold__live'));
   }
   function h(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
 
@@ -916,10 +991,11 @@ section[id]{scroll-margin-top:64px}
   function countUp(node) {
     const end = +node.dataset.count, fmt = (n) => n.toLocaleString('en-US');
     if (reduced) return;
+    const live = hold(node, [node.textContent]); // the final number keeps its width while it counts
     const t0 = performance.now(), dur = 1100;
     const step = (t) => {
-      const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3);
-      node.textContent = fmt(Math.round(end * e));
+      const k = Math.min(1, Math.max(0, (t - t0) / dur)), e = 1 - Math.pow(1 - k, 3); // a frame stamped before t0 would count from -5
+      live.textContent = fmt(Math.round(end * e));
       if (k < 1) requestAnimationFrame(step);
     };
     requestAnimationFrame(step);
@@ -963,6 +1039,13 @@ section[id]{scroll-margin-top:64px}
     const tried = new Set();
     const tbody = $('card3-rows'), msg = $('card3-msg'), count = $('card3-count');
     const bBr = $('hs-breaker'), bA = $('hs-a'), bB = $('hs-b');
+    const MSG = {
+      off: 'Breaker off. L1 and L2 are both dead, so no switch position can light the lamp. That’s the only state in which hands go near the wiring.',
+      all: 'All four positions tried, and the lamp changed at every flip from either end. That’s how the sample’s last decision proves the job.',
+      lit: 'Lamp on. Flip either switch: it should go off.',
+      dark: 'Lamp off. Flip either switch: it should come back on.'
+    };
+    const msgLive = hold(msg, Object.values(MSG));
     function render() {
       const lit = st.on && st.a === st.b;
       view.classList.toggle('is-live', st.on);
@@ -984,9 +1067,7 @@ section[id]{scroll-margin-top:64px}
         tbody.append(tr);
       });
       count.textContent = `${tried.size} of 4 tried`;
-      if (!st.on) msg.textContent = 'Breaker off. L1 and L2 are both dead, so no switch position can light the lamp. That’s the only state in which hands go near the wiring.';
-      else if (tried.size === 4) msg.textContent = 'All four positions tried, and the lamp changed at every flip from either end. That’s how the sample’s last decision proves the job.';
-      else msg.textContent = lit ? 'Lamp on. Flip either switch: it should go off.' : 'Lamp off. Flip either switch: it should come back on.';
+      msgLive.textContent = !st.on ? MSG.off : tried.size === 4 ? MSG.all : lit ? MSG.lit : MSG.dark;
     }
     bBr.addEventListener('click', () => { st.on = !st.on; render(); });
     bA.addEventListener('click', () => { st.a = st.a === 'UP' ? 'DOWN' : 'UP'; render(); });
@@ -1019,15 +1100,35 @@ section[id]{scroll-margin-top:64px}
     const tidy = (s) => s.replace(/ - /g, ' – ').replace(/(^|[\s(])'/g, '$1‘').replace(/'/g, '’');
     const tx = (o) => tidy(o[lang]);
     const at = ([fx, fy]) => [box.x + fx * box.w, box.y + fy * box.h];
+    // every text each box can show, in both languages, is reserved up front so nothing below it moves
+    const both = (o) => [tidy(o.en), tidy(o.fil)];
+    const titleLive = hold(hudTitle, both(DATA.title));
+    const instrLive = hold(hudInstr, [...DATA.decisions.flatMap((d) => both(d.instruction)), ...both(DATA.decisions[N - 1].plays)]);
+    const scoreLive = hold(scoreEl, [UI.en.score(MAX, MAX)]);
+    const LABELS = DATA.decisions.flatMap((d) => d.options.flatMap((o) => both(o.label)));
+    const fbLive = hold(fb, fbGhosts()); fbLive.classList.add('fb__row');
+    function fbGhosts() {
+      const row = (chipText, ...ps) => { const r = h('div', 'fb__row'), b = h('div', 'fb__body'); if (chipText) r.append(h('span', 'fb__chip', chipText)); b.append(...ps); r.append(b); return r; };
+      const out = [];
+      for (const l of ['en', 'fil']) {
+        const u = UI[l];
+        out.push(row(null, h('p', 'fb__label', u.brief), h('p', 'fb__text', tidy(DATA.brief[l]))));
+        for (const d of DATA.decisions) {
+          out.push(row('+10', h('p', 'fb__text', u.correct + ' ' + tidy(d.plays[l]))));
+          for (const o of d.options) if (o.feedback) out.push(row('−5', h('p', 'fb__text', tidy(o.feedback[l]))), row('✗', h('p', 'fb__text', u.repeat(tidy(o.feedback[l])))));
+        }
+      }
+      return out; // the end-of-run summary isn't reserved: its review list depends on the run
+    }
 
     function renderHud() {
       const u = UI[lang];
-      hudTitle.textContent = tx(DATA.title);
+      titleLive.textContent = tx(DATA.title);
       hudCount.textContent = finished ? u.done : u.count(i + 1, N);
-      hudInstr.textContent = tx(finished ? DATA.decisions[N - 1].plays : DATA.decisions[i].instruction);
+      instrLive.textContent = tx(finished ? DATA.decisions[N - 1].plays : DATA.decisions[i].instruction);
       cells.textContent = '';
       for (let k = 0; k < N; k++) cells.append(h('span', 'cell' + (k < done ? (wrong[k].size ? ' is-mixed' : ' is-clean') : (k === i && !finished ? ' is-now' : ''))));
-      scoreEl.textContent = u.score(total(), MAX);
+      scoreLive.textContent = u.score(total(), MAX);
     }
     function renderOptions(enter) {
       opts.textContent = '';
@@ -1038,7 +1139,8 @@ section[id]{scroll-margin-top:64px}
         const b = h('button', 'opt' + (wrong[i].has(o.id) ? ' is-tried' : ''));
         b.type = 'button'; b.dataset.oi = oi;
         const key = h('span', 'opt__key', 'ABC'[k]); key.setAttribute('aria-hidden', 'true');
-        b.append(key, h('span', 'opt__label', tx(o.label)));
+        const label = h('span', 'opt__label'); hold(label, LABELS).textContent = tx(o.label);
+        b.append(key, label);
         b.addEventListener('click', () => choose(oi));
         opts.append(b);
       });
@@ -1046,10 +1148,10 @@ section[id]{scroll-margin-top:64px}
     }
     function renderFeedback() {
       const u = UI[lang];
-      fb.textContent = '';
-      fb.className = 'fb is-' + last.kind;
+      fbLive.textContent = '';
+      fb.className = 'fb hold is-' + last.kind;
       const body = h('div', last.kind === 'final' ? 'fb__final' : 'fb__body');
-      const chip = (t) => fb.append(h('span', 'fb__chip', t));
+      const chip = (t) => fbLive.append(h('span', 'fb__chip', t));
       if (last.kind === 'brief') body.append(h('p', 'fb__label', u.brief), h('p', 'fb__text', tx(DATA.brief)));
       else if (last.kind === 'wrong' || last.kind === 'repeat') {
         const msg = tx(DATA.decisions[last.d].options[last.oi].feedback);
@@ -1072,7 +1174,7 @@ section[id]{scroll-margin-top:64px}
         again.addEventListener('click', reset);
         body.append(again);
       }
-      fb.append(body);
+      fbLive.append(body);
     }
     function choose(oi) {
       if (busy || finished) return;
@@ -1232,10 +1334,12 @@ section[id]{scroll-margin-top:64px}
     ];
     const tabs = $('tabs'), chips = $('chips'), img = $('viewer-img'), viewer = $('viewer');
     let q = 0, s = 0;
+    const info = Object.fromEntries(['where', 'title', 'meta', 'line'].map((k) => [k, hold($('info-' + k), Q.flatMap((x) => x.scenes.map((sc) => sc[k])))]));
+    const MOST = Math.max(...Q.map((x) => x.scenes.length)), TITLES = Q.flatMap((x) => x.scenes.map((sc) => sc.title));
     function show() {
       const sc = Q[q].scenes[s];
-      $('info-where').textContent = sc.where; $('info-title').textContent = sc.title;
-      $('info-meta').textContent = sc.meta; $('info-line').textContent = sc.line;
+      info.where.textContent = sc.where; info.title.textContent = sc.title;
+      info.meta.textContent = sc.meta; info.line.textContent = sc.line;
       const src = `img/${sc.img}.webp`;
       if (!img.src.endsWith(src)) {
         img.classList.add('is-swapping');
@@ -1247,10 +1351,13 @@ section[id]{scroll-margin-top:64px}
         const li = h('li'), b = h('button', 'chip'); b.type = 'button';
         b.setAttribute('aria-pressed', String(k === s));
         const t = h('img'); t.src = `img/${x.img}.webp`; t.alt = ''; t.width = 44; t.height = 36; t.loading = 'lazy';
-        b.append(t, h('span', '', x.title));
+        const name = h('span'); hold(name, TITLES).textContent = x.title;
+        b.append(t, name);
         b.addEventListener('click', () => { s = k; show(); });
         li.append(b); chips.append(li);
       });
+      // pad short quarters with invisible chips so the panel keeps its height between tabs
+      for (let k = Q[q].scenes.length; k < MOST; k++) { const pad = chips.lastElementChild.cloneNode(true); pad.style.visibility = 'hidden'; pad.setAttribute('aria-hidden', 'true'); chips.append(pad); }
     }
     Q.forEach((x, k) => {
       const b = h('button', 'tab', x.tab); b.type = 'button';
@@ -1287,10 +1394,11 @@ section[id]{scroll-margin-top:64px}
         why: 'The picture was never short of pixels. A sharper camera in the same place records a sharper silhouette, and its bigger files fill the disk faster.', meta: 'In AR: 25 decisions · 250 pts' }
     ];
     const list = $('fix-list'), scoreEl = $('fix-score');
+    const scoreLive = hold(scoreEl, ['0 of 4 answered', '4 of 4 right first time. You’d have caught every wrong fix.', '3 of 4 right first time. Each of these is a full AR paper in the app.']);
     const results = new Array(F.length).fill(null);
     function score() {
       const n = results.filter((r) => r !== null).length, ok = results.filter((r) => r === true).length;
-      scoreEl.textContent = n === F.length ? `${ok} of 4 right first time. ${ok === 4 ? 'You’d have caught every wrong fix.' : 'Each of these is a full AR paper in the app.'}` : `${n} of 4 answered`;
+      scoreLive.textContent = n === F.length ? `${ok} of 4 right first time. ${ok === 4 ? 'You’d have caught every wrong fix.' : 'Each of these is a full AR paper in the app.'}` : `${n} of 4 answered`;
     }
     F.forEach((f, k) => {
       const card = h('article', 'fix');
@@ -1303,9 +1411,9 @@ section[id]{scroll-margin-top:64px}
         if (results[k] === null) results[k] = isRight;
         verdict.textContent = isRight ? '✓ Right call' : '✗ That’s the wrong fix';
         verdict.className = 'verdict ' + (isRight ? 'is-ok' : 'is-bad');
-        picked.textContent = isRight ? f.right : f.wrong;
-        picked.className = 'picked' + (isRight ? '' : ' is-bad');
-        rightLine.hidden = isRight;
+        pickedLive.textContent = isRight ? f.right : f.wrong;
+        picked.classList.toggle('is-bad', !isRight);
+        rightLine.style.visibility = isRight ? 'hidden' : '';
         card.classList.add('is-flipped');
         front.inert = true; back.inert = false; front.setAttribute('aria-hidden', 'true'); back.removeAttribute('aria-hidden');
         back.querySelector('button').focus({ preventScroll: true });
@@ -1316,7 +1424,7 @@ section[id]{scroll-margin-top:64px}
       for (const [text, isRight] of opts) { const b = h('button', 'answer', text); b.type = 'button'; b.addEventListener('click', () => pick(isRight)); ans.append(b); }
       fb.append(ans); front.append(fig(), fb);
       const back = h('div', 'face face--back'), bb = h('div', 'face__body');
-      const verdict = h('p', 'verdict'), picked = h('p', 'picked');
+      const verdict = h('p', 'verdict', '✓ Right call'), picked = h('p', 'picked'), pickedLive = hold(picked, [f.right, f.wrong]);
       const rightLine = h('p', '', ''); rightLine.append(h('span', 'face__label', 'The right job: '), document.createTextNode(f.right));
       const flipBack = h('button', 'btn btn--line face__back-btn', 'Turn the card back'); flipBack.type = 'button';
       flipBack.addEventListener('click', () => { card.classList.remove('is-flipped'); back.inert = true; front.inert = false; back.setAttribute('aria-hidden', 'true'); front.removeAttribute('aria-hidden'); front.querySelector('.answer').focus({ preventScroll: true }); });
@@ -1334,6 +1442,8 @@ section[id]{scroll-margin-top:64px}
     const SYMBOL_CM = 3.6, VIEW_PER_CM = 2 * Math.tan(27 * Math.PI / 180), NEED = 0.35, SYMBOL_OF_CARD = 0.69;
     const range = $('dist'), read = $('dist-read'), meter = $('meter'), fill = $('meter-fill');
     const phone = $('phone'), screen = $('phone-screen'), card = $('phone-card'), scene = $('phone-scene'), status = $('phone-status');
+    const readout = (d, pct, ok) => { const f = document.createDocumentFragment(); f.append(h('b', '', d.toFixed(1) + ' cm'), ' from the card. The code fills ', h('b', '', pct + '%'), ok ? ' of the view, enough to place.' : ` of the view; it needs ${NEED * 100}%.`); return f; };
+    const readLive = hold(read, [readout(30, 100, true), readout(30, 100, false)]);
     let timers = [];
     function update() {
       timers.forEach(clearTimeout); timers = [];
@@ -1343,8 +1453,8 @@ section[id]{scroll-margin-top:64px}
       const ok = frac >= NEED;
       meter.classList.toggle('is-ok', ok);
       fill.style.width = (frac * 100).toFixed(1) + '%';
-      read.innerHTML = '';
-      read.append(h('b', '', d.toFixed(1) + ' cm'), document.createTextNode(' from the card. The code fills '), h('b', '', Math.round(frac * 100) + '%'), document.createTextNode(ok ? ' of the view, enough to place.' : ` of the view; it needs ${NEED * 100}%.`));
+      readLive.textContent = '';
+      readLive.append(readout(d, Math.round(frac * 100), ok));
       range.setAttribute('aria-valuetext', `${d.toFixed(1)} centimetres, code fills ${Math.round(frac * 100)} percent`);
       // the scene is sized from the marker: about twice the code's width, standing on it
       scene.style.width = (2 * symbolPx) + 'px';
@@ -1363,6 +1473,9 @@ section[id]{scroll-margin-top:64px}
   /* ---------------- heights wall ---------------- */
   (() => {
     const svg = $('wall-svg'), wall = $('wall'), list = $('dev-list'), msg = $('wall-msg');
+    const msgLive = hold(msg, ['All four at DPWH heights. That’s the wall every ElectAR room is built on.', '3 of 4 at the right height.']);
+    const hint = $('hint-btn'), hintLive = hold(hint, ['Show target lines', 'Hide target lines']);
+    hintLive.textContent = 'Show target lines';
     const FLOOR = 440, PX = 200, y = (m) => FLOOR - m * PX, m = (py) => (FLOOR - py) / PX;
     // DPWH standard plan for DepEd schools, heights to the device centre
     const D = [
@@ -1391,6 +1504,8 @@ section[id]{scroll-margin-top:64px}
       const tag = el('text', { class: 'd-tag', x: 0, y: d.h / 2 + 18, 'text-anchor': 'middle' }, g);
       const li = h('li'), name = h('b', '', d.name), hv = h('span', 'h', '');
       li.append(name, hv); list.append(li);
+      // the tick always takes its space, so the centred height doesn't slide when it appears
+      d.tagV = el('tspan', {}, tag); el('tspan', { class: 'd-tag__ok' }, tag).textContent = ' ✓';
       d.g = g; d.tag = tag; d.li = li; d.hv = hv;
       groups.push(d); rows.push(li);
     });
@@ -1400,13 +1515,13 @@ section[id]{scroll-margin-top:64px}
       if (d.ok) d.h0 = d.target;
       d.g.setAttribute('transform', `translate(${d.x} ${y(d.h0)})`);
       d.g.classList.toggle('is-set', d.ok);
-      d.tag.textContent = d.h0.toFixed(2) + ' m' + (d.ok ? ' ✓' : '');
+      d.tagV.textContent = d.h0.toFixed(2) + ' m';
       d.g.setAttribute('aria-valuenow', d.h0.toFixed(2));
       d.g.setAttribute('aria-valuetext', `${d.h0.toFixed(2)} metres${d.ok ? ', correct height' : ''}`);
       d.li.classList.toggle('is-set', d.ok);
       d.hv.textContent = d.ok ? d.target.toFixed(2) + ' m ✓' : '?';
       const n = groups.filter((x) => x.ok).length;
-      msg.textContent = n === groups.length ? 'All four at DPWH heights. That’s the wall every ElectAR room is built on.' : (n ? `${n} of 4 at the right height.` : '');
+      msgLive.textContent = n === groups.length ? 'All four at DPWH heights. That’s the wall every ElectAR room is built on.' : (n ? `${n} of 4 at the right height.` : '');
     }
     let drag = null;
     const toSvgY = (e) => { const p = svg.createSVGPoint(); p.x = e.clientX; p.y = e.clientY; return p.matrixTransform(svg.getScreenCTM().inverse()).y; };
@@ -1422,7 +1537,7 @@ section[id]{scroll-margin-top:64px}
     });
     const reset = () => groups.forEach((d) => set(d, d.start));
     $('wall-reset').addEventListener('click', reset);
-    $('hint-btn').addEventListener('click', (e) => { const on = !wall.classList.contains('show-hints'); wall.classList.toggle('show-hints', on); e.currentTarget.setAttribute('aria-pressed', String(on)); e.currentTarget.textContent = on ? 'Hide target lines' : 'Show target lines'; });
+    $('hint-btn').addEventListener('click', (e) => { const on = !wall.classList.contains('show-hints'); wall.classList.toggle('show-hints', on); e.currentTarget.setAttribute('aria-pressed', String(on)); hintLive.textContent = on ? 'Hide target lines' : 'Show target lines'; });
     reset();
   })();
 
@@ -1436,9 +1551,11 @@ section[id]{scroll-margin-top:64px}
       { sw: 'n', name: 'White or grey', role: 'Neutral', text: 'The grounded conductor, where a supply has one. Provincial co-ops may supply line-to-neutral; a lesson says which it shows.' }
     ];
     const btns = $('wire-btns'), out = $('wire-detail');
+    const detail = (w) => { const f = document.createDocumentFragment(); f.append(h('b', '', `${w.name} · ${w.role}. `), w.text); return f; };
+    const outLive = hold(out, W.map(detail));
     function show(k) {
       [...btns.children].forEach((b, j) => b.setAttribute('aria-pressed', String(j === k)));
-      out.textContent = ''; out.append(h('b', '', `${W[k].name} · ${W[k].role}. `), document.createTextNode(W[k].text));
+      outLive.textContent = ''; outLive.append(detail(W[k]));
     }
     W.forEach((w, k) => {
       const b = h('button', 'wbtn'); b.type = 'button';
