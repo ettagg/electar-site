@@ -11,7 +11,7 @@ A static site: `index.html` plus the scene renders in `img/`. No build step.
 
 The hero's "Download Android APK" button points at
 `https://github.com/ettagg/electar-site/releases/latest/download/ElectAR-debug.apk`,
-so it always serves the newest GitHub Release on this repo. The APK (~298 MB debug build) lives
+so it always serves the newest GitHub Release on this repo. The APK (~80 MB signed release build; uninstall any older debug build first) lives
 on Releases, not in git: GitHub rejects files over 100 MB, and the app repo is private,
 so its releases can't be downloaded publicly.
 
